@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bpmn.BpmnModel
 {
-    public class BpmnStartEvent : BpmnBase
+    public class BpmnStartEvent : BpmnFlowElement
     {
     }
 }

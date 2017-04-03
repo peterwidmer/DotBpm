@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bpmn.BpmnModel
 {
-    public class BpmnSequenceFlow : BpmnBase
+    public class BpmnSequenceFlow : BpmnFlowElement
     {
         public string SourceRef { get; set; }
         public string TargetRef { get; set; }

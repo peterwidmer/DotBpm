@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bpmn.BpmnModel
 {
-    public class BpmnProcess : BpmnBase
+    public class BpmnProcess : BpmnBaseElement
     {
         public bool IsExecutable { get; set; }
 

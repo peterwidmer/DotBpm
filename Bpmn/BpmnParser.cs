@@ -76,7 +76,7 @@ namespace Bpmn
             }
         }
 
-        private void BaseParser(BpmnBase bpmnBase, XmlElement bpmnElement)
+        private void BaseParser(BpmnFlowElement bpmnBase, XmlElement bpmnElement)
         {
             bpmnBase.Id = bpmnElement.GetAttribute("id");
             bpmnBase.Name = bpmnElement.GetAttribute("name");

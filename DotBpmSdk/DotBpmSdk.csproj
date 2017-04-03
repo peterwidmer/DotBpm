@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}</ProjectGuid>
+    <ProjectGuid>{B4682615-C7C6-44AC-AD8B-F8223F0BF966}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bpmn</RootNamespace>
-    <AssemblyName>Bpmn</AssemblyName>
+    <RootNamespace>DotBpmSdk</RootNamespace>
+    <AssemblyName>DotBpmSdk</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,14 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BpmnModel\BpmnBaseElement.cs" />
-    <Compile Include="BpmnModel\BpmnFlowElement.cs" />
-    <Compile Include="BpmnModel\BpmnProcess.cs" />
-    <Compile Include="BpmnModel\BpmnSequenceFlow.cs" />
-    <Compile Include="BpmnModel\BpmnStartEvent.cs" />
-    <Compile Include="BpmnModel\BpmnTask.cs" />
-    <Compile Include="BpmnParser.cs" />
-    <Compile Include="BpmnXmlHelper.cs" />
+    <Compile Include="ProcessInstance.cs" />
+    <Compile Include="ProcessToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

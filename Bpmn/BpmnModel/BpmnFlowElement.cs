@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Bpmn.BpmnModel
 {
-    public class BpmnTask : BpmnFlowElement
+    public class BpmnFlowElement : BpmnBaseElement
     {
-        
+        public string Name { get; set; }
     }
 }
