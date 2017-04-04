@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1DC532AE-8133-4DAD-AC7B-9DDE7F53CBDE}</ProjectGuid>
+    <ProjectGuid>{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProcessEngine</RootNamespace>
-    <AssemblyName>ProcessEngine</AssemblyName>
+    <RootNamespace>StorageEngine</RootNamespace>
+    <AssemblyName>StorageEngine</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,22 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProcessEngine.cs" />
+    <Compile Include="ProcessDefinition.cs" />
+    <Compile Include="IProcessDefinitionStore.cs" />
+    <Compile Include="ProcessDefinitionStore_InMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bpmn\Bpmn.csproj">
-      <Project>{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}</Project>
-      <Name>Bpmn</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DotBpmSdk\DotBpmSdk.csproj">
-      <Project>{B4682615-C7C6-44AC-AD8B-F8223F0BF966}</Project>
-      <Name>DotBpmSdk</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StorageEngine\StorageEngine.csproj">
-      <Project>{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}</Project>
-      <Name>StorageEngine</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

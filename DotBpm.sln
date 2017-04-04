@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotBpmSdk", "DotBpmSdk\DotBpmSdk.csproj", "{B4682615-C7C6-44AC-AD8B-F8223F0BF966}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageEngine", "StorageEngine\StorageEngine.csproj", "{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B4682615-C7C6-44AC-AD8B-F8223F0BF966}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4682615-C7C6-44AC-AD8B-F8223F0BF966}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4682615-C7C6-44AC-AD8B-F8223F0BF966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

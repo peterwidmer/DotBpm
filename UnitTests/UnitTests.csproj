@@ -54,6 +54,7 @@
     <Compile Include="Bpmn\LoadDiagram_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper.cs" />
+    <Compile Include="StorageEngine\TestProcessDefinitionStore_InMemory.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Bpmn\diagram.bpmn" />
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\Bpmn\Bpmn.csproj">
       <Project>{18206c60-3b8f-43ba-b24f-c317a0ce0bcf}</Project>
       <Name>Bpmn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StorageEngine\StorageEngine.csproj">
+      <Project>{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}</Project>
+      <Name>StorageEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
