@@ -1,4 +1,5 @@
 ﻿using Bpmn;
+using Bpmn.BpmnModel;
 using DotBpmSdk;
 using StorageEngine;
 using System;
@@ -21,13 +22,24 @@ namespace ProcessEngine
 
         public void StartProcess(string processName)
         {
+            var bpmnProcess = LoadBpmnProcess(processName);
+            var processInstance = new ProcessInstance()
+            {
+                Id = Guid.NewGuid(),
+                BpmnProcess = bpmnProcess,
+                Tokens = bpmnProcess.Elements.OfType<BpmnStartEvent>().Select(t => new ProcessToken(t.Id)).ToList()
+            };
+        }
+
+        private BpmnProcess LoadBpmnProcess(string processName)
+        {
             var processDefinition = processDefinitionStore.Load(processName);
 
             var bpmnDocument = new XmlDocument();
             bpmnDocument.LoadXml(processDefinition.BpmnContent);
 
             var bpmnParser = new BpmnParser(bpmnDocument);
-            var process = bpmnParser.Parse();
+            return bpmnParser.Parse();
         }
     }
 }

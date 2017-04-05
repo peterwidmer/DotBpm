@@ -10,7 +10,7 @@ namespace DotBpmSdk
     public class ProcessInstance
     {
         public Guid Id { get; set; }
-        public BpmnProcess ProcessDefinition { get; set; }
+        public BpmnProcess BpmnProcess { get; set; }
         public List<ProcessToken> Tokens { get; set; }
 
         public ProcessInstance()

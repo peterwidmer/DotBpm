@@ -50,7 +50,7 @@ namespace Bpmn
             {
                 var startEvent = new BpmnStartEvent();
                 BaseParser(startEvent, startEventElement);
-                process.StartEvents.Add(startEvent);
+                process.Elements.Add(startEvent);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Bpmn
             {
                 var task = new BpmnTask();
                 BaseParser(task, taskElement);
-                process.Tasks.Add(task);
+                process.Elements.Add(task);
             }
         }
 
@@ -72,7 +72,7 @@ namespace Bpmn
                 sequenceFlow.SourceRef = sequenceFlowElement.GetAttribute("sourceRef");
                 sequenceFlow.TargetRef = sequenceFlowElement.GetAttribute("targetRef");
                 BaseParser(sequenceFlow, sequenceFlowElement);
-                process.SequenceFlows.Add(sequenceFlow);
+                process.Elements.Add(sequenceFlow);
             }
         }
 

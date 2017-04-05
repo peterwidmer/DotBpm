@@ -10,5 +10,10 @@ namespace DotBpmSdk
     {
         public string CurrentElementId { get; set; }
         public object ScopeData { get; set; } 
+
+        public ProcessToken(string currentElementId)
+        {
+            CurrentElementId = currentElementId;
+        }
     }
 }
