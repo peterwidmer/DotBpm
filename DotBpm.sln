@@ -3,42 +3,42 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessEngine", "ProcessEngine\ProcessEngine.csproj", "{1DC532AE-8133-4DAD-AC7B-9DDE7F53CBDE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bpmn", "Bpmn\Bpmn.csproj", "{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{DA231DFE-78DA-454D-A3FF-02895DDA3B88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotBpmSdk", "DotBpmSdk\DotBpmSdk.csproj", "{B4682615-C7C6-44AC-AD8B-F8223F0BF966}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DotBpm.Bpmn", "DotBpm.Bpmn\DotBpm.Bpmn.shproj", "{455EF693-C3D2-4034-B762-58F6AD9ECA3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageEngine", "StorageEngine\StorageEngine.csproj", "{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DotBpm.Sdk", "DotBpm.Sdk\DotBpm.Sdk.shproj", "{65F07760-FC32-4A32-97D4-04E218A70480}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotBpm", "DotBpm\DotBpm.csproj", "{239EC179-8BF4-4BA0-9082-62BD3FCD8EB7}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DotBpm.ProcessEngine", "DotBpm.ProcessEngine\DotBpm.ProcessEngine.shproj", "{8D986CAC-2FB1-4210-BFD4-CD4EA1523EAF}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DotBpm.StorageEngine", "DotBpm.StorageEngine\DotBpm.StorageEngine.shproj", "{D54A1A12-01F0-4FA9-A2C6-DF097EB65D74}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DotBpm.Bpmn\DotBpm.Bpmn.projitems*{239ec179-8bf4-4ba0-9082-62bd3fcd8eb7}*SharedItemsImports = 4
+		DotBpm.ProcessEngine\DotBpm.ProcessEngine.projitems*{239ec179-8bf4-4ba0-9082-62bd3fcd8eb7}*SharedItemsImports = 4
+		DotBpm.Sdk\DotBpm.Sdk.projitems*{239ec179-8bf4-4ba0-9082-62bd3fcd8eb7}*SharedItemsImports = 4
+		DotBpm.StorageEngine\DotBpm.StorageEngine.projitems*{239ec179-8bf4-4ba0-9082-62bd3fcd8eb7}*SharedItemsImports = 4
+		DotBpm.Bpmn\DotBpm.Bpmn.projitems*{455ef693-c3d2-4034-b762-58f6ad9eca3b}*SharedItemsImports = 13
+		DotBpm.Sdk\DotBpm.Sdk.projitems*{65f07760-fc32-4a32-97d4-04e218a70480}*SharedItemsImports = 13
+		DotBpm.ProcessEngine\DotBpm.ProcessEngine.projitems*{8d986cac-2fb1-4210-bfd4-cd4ea1523eaf}*SharedItemsImports = 13
+		DotBpm.StorageEngine\DotBpm.StorageEngine.projitems*{d54a1a12-01f0-4fa9-a2c6-df097eb65d74}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1DC532AE-8133-4DAD-AC7B-9DDE7F53CBDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DC532AE-8133-4DAD-AC7B-9DDE7F53CBDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DC532AE-8133-4DAD-AC7B-9DDE7F53CBDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DC532AE-8133-4DAD-AC7B-9DDE7F53CBDE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA231DFE-78DA-454D-A3FF-02895DDA3B88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA231DFE-78DA-454D-A3FF-02895DDA3B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA231DFE-78DA-454D-A3FF-02895DDA3B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA231DFE-78DA-454D-A3FF-02895DDA3B88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4682615-C7C6-44AC-AD8B-F8223F0BF966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4682615-C7C6-44AC-AD8B-F8223F0BF966}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4682615-C7C6-44AC-AD8B-F8223F0BF966}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4682615-C7C6-44AC-AD8B-F8223F0BF966}.Release|Any CPU.Build.0 = Release|Any CPU
-		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{239EC179-8BF4-4BA0-9082-62BD3FCD8EB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{239EC179-8BF4-4BA0-9082-62BD3FCD8EB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{239EC179-8BF4-4BA0-9082-62BD3FCD8EB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{239EC179-8BF4-4BA0-9082-62BD3FCD8EB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

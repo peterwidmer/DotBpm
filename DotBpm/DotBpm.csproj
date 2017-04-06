@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B4682615-C7C6-44AC-AD8B-F8223F0BF966}</ProjectGuid>
+    <ProjectGuid>{239EC179-8BF4-4BA0-9082-62BD3FCD8EB7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotBpmSdk</RootNamespace>
-    <AssemblyName>DotBpmSdk</AssemblyName>
+    <RootNamespace>DotBpm</RootNamespace>
+    <AssemblyName>DotBpm</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,6 +42,10 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <Import Project="..\DotBpm.ProcessEngine\DotBpm.ProcessEngine.projitems" Label="Shared" />
+  <Import Project="..\DotBpm.StorageEngine\DotBpm.StorageEngine.projitems" Label="Shared" />
+  <Import Project="..\DotBpm.Sdk\DotBpm.Sdk.projitems" Label="Shared" />
+  <Import Project="..\DotBpm.Bpmn\DotBpm.Bpmn.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

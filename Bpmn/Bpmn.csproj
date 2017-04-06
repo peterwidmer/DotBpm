@@ -40,15 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BpmnModel\BpmnBaseElement.cs" />
-    <Compile Include="BpmnModel\BpmnFlowElement.cs" />
-    <Compile Include="BpmnModel\BpmnProcess.cs" />
-    <Compile Include="BpmnModel\BpmnSequenceFlow.cs" />
-    <Compile Include="BpmnModel\BpmnStartEvent.cs" />
-    <Compile Include="BpmnModel\BpmnTask.cs" />
-    <Compile Include="BpmnParser.cs" />
-    <Compile Include="BpmnXmlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BpmnModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

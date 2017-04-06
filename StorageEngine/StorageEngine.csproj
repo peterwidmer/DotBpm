@@ -40,15 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IProcessDefinitionStore.cs" />
-    <Compile Include="ProcessDefinitionStore_InMemory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DotBpmSdk\DotBpmSdk.csproj">
-      <Project>{B4682615-C7C6-44AC-AD8B-F8223F0BF966}</Project>
-      <Name>DotBpmSdk</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

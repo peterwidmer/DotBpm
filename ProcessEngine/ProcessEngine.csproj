@@ -40,19 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProcessEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunEngine.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bpmn\Bpmn.csproj">
-      <Project>{18206C60-3B8F-43BA-B24F-C317A0CE0BCF}</Project>
-      <Name>Bpmn</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DotBpmSdk\DotBpmSdk.csproj">
-      <Project>{B4682615-C7C6-44AC-AD8B-F8223F0BF966}</Project>
-      <Name>DotBpmSdk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\StorageEngine\StorageEngine.csproj">
       <Project>{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}</Project>
       <Name>StorageEngine</Name>

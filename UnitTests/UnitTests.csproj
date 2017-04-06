@@ -60,17 +60,9 @@
     <EmbeddedResource Include="Bpmn\diagram.bpmn" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bpmn\Bpmn.csproj">
-      <Project>{18206c60-3b8f-43ba-b24f-c317a0ce0bcf}</Project>
-      <Name>Bpmn</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DotBpmSdk\DotBpmSdk.csproj">
-      <Project>{B4682615-C7C6-44AC-AD8B-F8223F0BF966}</Project>
-      <Name>DotBpmSdk</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StorageEngine\StorageEngine.csproj">
-      <Project>{31A15116-0E2F-4E04-86EF-8BA4C83E6A82}</Project>
-      <Name>StorageEngine</Name>
+    <ProjectReference Include="..\DotBpm\DotBpm.csproj">
+      <Project>{239ec179-8bf4-4ba0-9082-62bd3fcd8eb7}</Project>
+      <Name>DotBpm</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
