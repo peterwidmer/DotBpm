@@ -4,8 +4,8 @@ using System.Text;
 
 namespace DotBpm.Sdk.Commands
 {
-    public class ProceedTokenCommand : TokenCommandBase
+    public class TokenCommandBase : Command
     {
-        
+        public ProcessToken Token { get; set; }
     }
 }
