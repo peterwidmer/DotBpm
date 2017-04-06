@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Xml;
-using Bpmn;
+using DotBpm.Bpmn;
 using System.Linq;
-using Bpmn.BpmnModel;
+using DotBpm.Bpmn.BpmnModel;
 
 namespace UnitTests
 {

@@ -1,11 +1,11 @@
-﻿using Bpmn.BpmnModel;
+﻿using DotBpm.Bpmn.BpmnModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotBpmSdk
+namespace DotBpm.Sdk
 {
     public class ProcessInstance
     {

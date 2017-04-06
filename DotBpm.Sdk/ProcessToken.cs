@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotBpmSdk
+namespace DotBpm.Sdk
 {
     public class ProcessToken
     {

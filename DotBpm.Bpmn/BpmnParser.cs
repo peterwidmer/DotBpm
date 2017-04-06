@@ -1,4 +1,4 @@
-﻿using Bpmn.BpmnModel;
+﻿using DotBpm.Bpmn.BpmnModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Bpmn
+namespace DotBpm.Bpmn
 {
     public class BpmnParser
     {
@@ -40,6 +40,7 @@ namespace Bpmn
             ParseStartEvents(process, processElement);
             ParseTasks(process, processElement);
             ParseSequenceFlows(process, processElement);
+            ParseEndEvents(process, processElement);
 
             return process;
         }
@@ -51,6 +52,16 @@ namespace Bpmn
                 var startEvent = new BpmnStartEvent();
                 BaseParser(startEvent, startEventElement);
                 process.Elements.Add(startEvent);
+            }
+        }
+
+        private void ParseEndEvents(BpmnProcess process, XmlElement processElement)
+        {
+            foreach (var endEventElement in processElement.GetElementsByTagName("endEvent", NS_BPMNMODEL).OfType<XmlElement>())
+            {
+                var endEvent = new BpmnStartEvent();
+                BaseParser(endEvent, endEventElement);
+                process.Elements.Add(endEvent);
             }
         }
 

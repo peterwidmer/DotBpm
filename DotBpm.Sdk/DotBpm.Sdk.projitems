@@ -9,6 +9,8 @@
     <Import_RootNamespace>DotBpm.Sdk</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\Command.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\ProceedTokenCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessDefinition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessInstance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessToken.cs" />
