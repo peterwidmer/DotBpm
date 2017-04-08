@@ -26,8 +26,7 @@ namespace ProcessEngine
             var processInstance = new ProcessInstance()
             {
                 Id = Guid.NewGuid(),
-                BpmnProcess = bpmnProcess,
-                Tokens = bpmnProcess.Elements.OfType<BpmnStartEvent>().Select(t => new ProcessToken(t.Id)).ToList()
+                BpmnProcess = bpmnProcess
             };
         }
 

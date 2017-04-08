@@ -50,7 +50,8 @@ namespace DotBpm.Bpmn
             foreach(var startEventElement in processElement.GetElementsByTagName("startEvent", NS_BPMNMODEL).OfType<XmlElement>())
             {
                 var startEvent = new BpmnStartEvent();
-                BaseParser(startEvent, startEventElement);
+                ParseBpmnFlowElement(startEvent, startEventElement);
+                ParseBpmnFlowNode(startEvent, startEventElement);
                 process.Elements.Add(startEvent);
             }
         }
@@ -60,7 +61,8 @@ namespace DotBpm.Bpmn
             foreach (var endEventElement in processElement.GetElementsByTagName("endEvent", NS_BPMNMODEL).OfType<XmlElement>())
             {
                 var endEvent = new BpmnStartEvent();
-                BaseParser(endEvent, endEventElement);
+                ParseBpmnFlowElement(endEvent, endEventElement);
+                ParseBpmnFlowNode(endEvent, endEventElement);
                 process.Elements.Add(endEvent);
             }
         }
@@ -70,7 +72,8 @@ namespace DotBpm.Bpmn
             foreach (var taskElement in processElement.GetElementsByTagName("task", NS_BPMNMODEL).OfType<XmlElement>())
             {
                 var task = new BpmnTask();
-                BaseParser(task, taskElement);
+                ParseBpmnFlowElement(task, taskElement);
+                ParseBpmnFlowNode(task, taskElement);
                 process.Elements.Add(task);
             }
         }
@@ -82,15 +85,28 @@ namespace DotBpm.Bpmn
                 var sequenceFlow = new BpmnSequenceFlow();
                 sequenceFlow.SourceRef = sequenceFlowElement.GetAttribute("sourceRef");
                 sequenceFlow.TargetRef = sequenceFlowElement.GetAttribute("targetRef");
-                BaseParser(sequenceFlow, sequenceFlowElement);
+                ParseBpmnFlowElement(sequenceFlow, sequenceFlowElement);
                 process.Elements.Add(sequenceFlow);
             }
         }
 
-        private void BaseParser(BpmnFlowElement bpmnBase, XmlElement bpmnElement)
+        private void ParseBpmnFlowElement(BpmnFlowElement bpmnFlowElement, XmlElement bpmnElement)
         {
-            bpmnBase.Id = bpmnElement.GetAttribute("id");
-            bpmnBase.Name = bpmnElement.GetAttribute("name");
+            bpmnFlowElement.Id = bpmnElement.GetAttribute("id");
+            bpmnFlowElement.Name = bpmnElement.GetAttribute("name");
+        }
+
+        private void ParseBpmnFlowNode(BpmnFlowNode bpmnFlowNode, XmlElement bpmnElement)
+        {
+            foreach(var incoming in bpmnElement.GetElementsByTagName("incoming", NS_BPMNMODEL).OfType<XmlElement>())
+            {
+                bpmnFlowNode.Incoming.Add(incoming.InnerText);
+            }
+
+            foreach (var outgoing in bpmnElement.GetElementsByTagName("outgoing", NS_BPMNMODEL).OfType<XmlElement>())
+            {
+                bpmnFlowNode.Outgoing.Add(outgoing.InnerText);
+            }
         }
     }
 }

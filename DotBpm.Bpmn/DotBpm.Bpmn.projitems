@@ -9,9 +9,11 @@
     <Import_RootNamespace>DotBpm.Bpmn</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnActivity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnBaseElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnEndEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFlowElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFlowNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnProcess.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnSequenceFlow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnStartEvent.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DotBpm.Bpmn.BpmnModel
 {
-    public class BpmnTask : BpmnFlowElement
+    public class BpmnTask : BpmnActivity
     {
         
     }

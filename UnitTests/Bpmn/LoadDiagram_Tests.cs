@@ -24,10 +24,13 @@ namespace UnitTests
             var startEvent1 = (BpmnStartEvent)process.Elements.FirstOrDefault(t => t.Id == "startevent_1");
             Assert.IsNotNull(startEvent1);
             Assert.AreEqual("Start Event 1", startEvent1.Name);
+            Assert.IsTrue(startEvent1.Outgoing.Contains("start_task_1"));
 
             var task1 = (BpmnTask)process.Elements.FirstOrDefault(t => t.Id == "test_task_1");
             Assert.IsNotNull(task1);
             Assert.AreEqual("Test Task 1", task1.Name);
+            Assert.IsTrue(task1.Incoming.Contains("start_task_1"));
+            Assert.IsTrue(task1.Outgoing.Contains("task_1_end"));
 
             var sequenceFlow_StartEvent_Task1 = (BpmnSequenceFlow)process.Elements.FirstOrDefault(t => t.Id == "start_task_1");
             Assert.IsNotNull(sequenceFlow_StartEvent_Task1);
