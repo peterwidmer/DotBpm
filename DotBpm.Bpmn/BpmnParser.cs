@@ -11,6 +11,7 @@ namespace DotBpm.Bpmn
     public class BpmnParser
     {
         public const string NS_BPMNMODEL = "http://www.omg.org/spec/BPMN/20100524/MODEL";
+        public const string NS_CAMUNDA = "http://camunda.org/schema/1.0/bpmn";
 
         private XmlDocument bpmnDocument;
         private List<BpmnProcess> Processes = new List<BpmnProcess>();
@@ -39,6 +40,7 @@ namespace DotBpm.Bpmn
 
             ParseStartEvents(process, processElement);
             ParseTasks(process, processElement);
+            ParseServiceTasks(process, processElement);
             ParseSequenceFlows(process, processElement);
             ParseEndEvents(process, processElement);
 
@@ -72,10 +74,26 @@ namespace DotBpm.Bpmn
             foreach (var taskElement in processElement.GetElementsByTagName("task", NS_BPMNMODEL).OfType<XmlElement>())
             {
                 var task = new BpmnTask();
-                ParseBpmnFlowElement(task, taskElement);
-                ParseBpmnFlowNode(task, taskElement);
+                ParseTask(taskElement, task);
                 process.Elements.Add(task);
             }
+        }
+
+        private void ParseServiceTasks(BpmnProcess process, XmlElement processElement)
+        {
+            foreach (var taskElement in processElement.GetElementsByTagName("serviceTask", NS_BPMNMODEL).OfType<XmlElement>())
+            {
+                var serviceTask = new BpmnServiceTask();
+                serviceTask.Class = taskElement.GetAttribute("class", NS_CAMUNDA);
+                ParseTask(taskElement, serviceTask);
+                process.Elements.Add(serviceTask);
+            }
+        }
+
+        private void ParseTask(XmlElement taskElement, BpmnTask task)
+        {
+            ParseBpmnFlowElement(task, taskElement);
+            ParseBpmnFlowNode(task, taskElement);   
         }
 
         public void ParseSequenceFlows(BpmnProcess process, XmlElement processElement)

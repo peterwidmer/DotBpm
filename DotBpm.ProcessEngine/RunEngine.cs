@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DotBpm.Bpmn.BpmnModel;
 
-namespace ProcessEngine
+namespace Engines
 {
     public class RunEngine
     {
@@ -35,6 +35,13 @@ namespace ProcessEngine
                 foreach (var command in commands.GetConsumingEnumerable())
                 {
                     ExecuteCommand(command);
+                    lock(processInstance.Tokens)
+                    {
+                        if(processInstance.Tokens.Count(t=> t.Value.Status == TokenStatus.Active) == 0)
+                        {
+                            break;
+                        }
+                    }
                 }
             });
         }
@@ -53,29 +60,42 @@ namespace ProcessEngine
         
         private void HandleProceedTokenCommand(ProceedTokenCommand command)
         {
-            var currentBpmnElement = processInstance.BpmnProcess.Elements.First(t => t.Id == command.Token.CurrentElementId);
-            if (currentBpmnElement is BpmnSequenceFlow)
+            lock (processInstance.Tokens)
             {
-                // Next must be an Element
-            }
-            else if (currentBpmnElement is BpmnFlowNode)
-            {
-                // Next must be a sequenceflow
-                var flowNode = (BpmnFlowNode)currentBpmnElement;
-                foreach (var outgoing in flowNode.Outgoing)
+                var currentBpmnElement = processInstance.BpmnProcess.Elements.First(t => t.Id == command.Token.CurrentElementId);
+                if (currentBpmnElement is BpmnSequenceFlow)
                 {
-                    processInstance.Tokens.Add(outgoing, new ProcessToken(outgoing));
+                    // Next must be an Element
+                    var sequenceFlow = (BpmnSequenceFlow)currentBpmnElement;
+                    
+                    var token = new ProcessToken(sequenceFlow.TargetRef);
+                    processInstance.Tokens.Add(sequenceFlow.TargetRef, token);
+                    commands.Add(new ExecuteTokenCommand() { Token = token });
                 }
-            }
-            else
-            {
-                throw new Exception("Unexpected BpmnElement on ExecuteCommand " + currentBpmnElement.GetType().Name);
+                else if (currentBpmnElement is BpmnFlowNode)
+                {
+                    // Create token for each outgoing and deactivate current token
+                    var flowNode = (BpmnFlowNode)currentBpmnElement;
+
+                    foreach (var outgoing in flowNode.Outgoing)
+                    {
+                        var token = new ProcessToken(outgoing);
+                        processInstance.Tokens.Add(outgoing, token);
+                        commands.Add(new ProceedTokenCommand() { Token = token });
+                    }
+                }
+                else
+                {
+                    throw new Exception("Unexpected BpmnElement on ExecuteCommand " + currentBpmnElement.GetType().Name);
+                }
+
+                processInstance.Tokens[currentBpmnElement.Id].Status = TokenStatus.Inactive;
             }
         }
 
         private void HandleExecuteTokenCommand(ExecuteTokenCommand command)
         {
-
+            processInstance.Tokens[command.Token.CurrentElementId].Status = TokenStatus.InExecution;
         }
     }
 }

@@ -26,9 +26,10 @@ namespace UnitTests
             Assert.AreEqual("Start Event 1", startEvent1.Name);
             Assert.IsTrue(startEvent1.Outgoing.Contains("start_task_1"));
 
-            var task1 = (BpmnTask)process.Elements.FirstOrDefault(t => t.Id == "test_task_1");
+            var task1 = (BpmnServiceTask)process.Elements.FirstOrDefault(t => t.Id == "test_task_1");
             Assert.IsNotNull(task1);
             Assert.AreEqual("Test Task 1", task1.Name);
+            Assert.AreEqual("DotBpm.ServiceTask.SleepTask", task1.Class);
             Assert.IsTrue(task1.Incoming.Contains("start_task_1"));
             Assert.IsTrue(task1.Outgoing.Contains("task_1_end"));
 

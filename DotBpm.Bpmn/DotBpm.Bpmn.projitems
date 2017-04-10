@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFlowNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnProcess.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnSequenceFlow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnServiceTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnStartEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnParser.cs" />

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace ProcessEngine
+namespace Engines
 {
     public class ProcessEngine
     {
@@ -20,10 +20,10 @@ namespace ProcessEngine
             this.processDefinitionStore = processDefinitionStore;
         }
 
-        public void StartProcess(string processName)
+        public ProcessInstance GetProcessInstance(string processName)
         {
             var bpmnProcess = LoadBpmnProcess(processName);
-            var processInstance = new ProcessInstance()
+            return new ProcessInstance()
             {
                 Id = Guid.NewGuid(),
                 BpmnProcess = bpmnProcess

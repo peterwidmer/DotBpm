@@ -13,8 +13,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Commands\ExecuteTokenCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\ProceedTokenCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\TokenCommandBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IServiceTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessDefinition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessInstance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessToken.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServiceTaskContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TokenStatus.cs" />
   </ItemGroup>
 </Project>
