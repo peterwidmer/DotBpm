@@ -62,7 +62,7 @@ namespace DotBpm.Bpmn
         {
             foreach (var endEventElement in processElement.GetElementsByTagName("endEvent", NS_BPMNMODEL).OfType<XmlElement>())
             {
-                var endEvent = new BpmnStartEvent();
+                var endEvent = new BpmnEndEvent();
                 ParseBpmnFlowElement(endEvent, endEventElement);
                 ParseBpmnFlowNode(endEvent, endEventElement);
                 process.Elements.Add(endEvent);

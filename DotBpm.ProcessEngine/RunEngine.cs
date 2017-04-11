@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DotBpm.Bpmn.BpmnModel;
+using System.Diagnostics;
+using DotBpm.ServiceTask;
+using System.ComponentModel;
 
 namespace Engines
 {
@@ -26,7 +29,7 @@ namespace Engines
             foreach (var startEvent in processInstance.BpmnProcess.Elements.OfType<BpmnStartEvent>())
             {
                 var token = new ProcessToken(startEvent.Id);
-                processInstance.Tokens.Add(startEvent.Id, token);
+                processInstance.Tokens.Add(token.Id, token);
                 commands.Add(new ExecuteTokenCommand() { Token =  token});                
             }
 
@@ -34,16 +37,28 @@ namespace Engines
             {
                 foreach (var command in commands.GetConsumingEnumerable())
                 {
-                    ExecuteCommand(command);
-                    lock(processInstance.Tokens)
-                    {
-                        if(processInstance.Tokens.Count(t=> t.Value.Status == TokenStatus.Active) == 0)
-                        {
-                            break;
-                        }
-                    }
+                    BackgroundWorker bgw = new BackgroundWorker();
+                    bgw.DoWork += Bgw_DoWork;
+                    bgw.RunWorkerCompleted += Bgw_RunWorkerCompleted;
+                    bgw.RunWorkerAsync(command);                    
                 }
             });
+        }
+
+        private void Bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lock (processInstance.Tokens)
+            {
+                if (processInstance.Tokens.Count(t => t.Value.Status == TokenStatus.Inactive) == processInstance.Tokens.Count)
+                {
+                    commands.CompleteAdding();
+                }
+            }
+        }
+
+        private void Bgw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            ExecuteCommand((Command)e.Argument);
         }
 
         private void ExecuteCommand(Command command)
@@ -66,10 +81,12 @@ namespace Engines
                 if (currentBpmnElement is BpmnSequenceFlow)
                 {
                     // Next must be an Element
+                    Trace.WriteLine("Token on : " + command.Token.CurrentElementId);
+                    
                     var sequenceFlow = (BpmnSequenceFlow)currentBpmnElement;
                     
                     var token = new ProcessToken(sequenceFlow.TargetRef);
-                    processInstance.Tokens.Add(sequenceFlow.TargetRef, token);
+                    processInstance.Tokens.Add(token.Id, token);
                     commands.Add(new ExecuteTokenCommand() { Token = token });
                 }
                 else if (currentBpmnElement is BpmnFlowNode)
@@ -80,7 +97,7 @@ namespace Engines
                     foreach (var outgoing in flowNode.Outgoing)
                     {
                         var token = new ProcessToken(outgoing);
-                        processInstance.Tokens.Add(outgoing, token);
+                        processInstance.Tokens.Add(token.Id, token);
                         commands.Add(new ProceedTokenCommand() { Token = token });
                     }
                 }
@@ -89,13 +106,22 @@ namespace Engines
                     throw new Exception("Unexpected BpmnElement on ExecuteCommand " + currentBpmnElement.GetType().Name);
                 }
 
-                processInstance.Tokens[currentBpmnElement.Id].Status = TokenStatus.Inactive;
+                processInstance.Tokens[command.Token.Id].Status = TokenStatus.Inactive;
             }
         }
 
         private void HandleExecuteTokenCommand(ExecuteTokenCommand command)
         {
-            processInstance.Tokens[command.Token.CurrentElementId].Status = TokenStatus.InExecution;
+            Trace.WriteLine("Token on : " + command.Token.CurrentElementId);
+            processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;
+            var currentBpmnElement = processInstance.BpmnProcess.Elements.First(t => t.Id == command.Token.CurrentElementId);
+            if(currentBpmnElement is BpmnServiceTask)
+            {
+                var sleepTask = new SleepTask();
+                sleepTask.Execute(new ServiceTaskContext(command.Token));
+            }            
+            
+            commands.Add(new ProceedTokenCommand() { Token = command.Token });
         }
     }
 }

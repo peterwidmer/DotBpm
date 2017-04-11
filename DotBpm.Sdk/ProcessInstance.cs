@@ -12,11 +12,11 @@ namespace DotBpm.Sdk
     {
         public Guid Id { get; set; }
         public BpmnProcess BpmnProcess { get; set; }
-        public Dictionary<string, ProcessToken> Tokens { get; set; }
+        public Dictionary<Guid, ProcessToken> Tokens { get; set; }
 
         public ProcessInstance()
         {
-            Tokens = new Dictionary<string, ProcessToken>();
+            Tokens = new Dictionary<Guid, ProcessToken>();
         }
     }
 }
