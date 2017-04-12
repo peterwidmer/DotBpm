@@ -119,9 +119,26 @@ namespace Engines
             {
                 var sleepTask = new SleepTask();
                 sleepTask.Execute(new ServiceTaskContext(command.Token));
-            }            
-            
-            commands.Add(new ProceedTokenCommand() { Token = command.Token });
+            }
+
+            if (currentBpmnElement is BpmnParallelGateway)
+            {
+                var parallelGateway = (BpmnParallelGateway)currentBpmnElement;
+                int numberOfTokensReceivedOnGateway = processInstance.Tokens.Count(t => t.Value.CurrentElementId == command.Token.CurrentElementId);
+                if(parallelGateway.Incoming.Count == numberOfTokensReceivedOnGateway)
+                {
+                    commands.Add(new ProceedTokenCommand() { Token = command.Token });
+                }
+                else
+                {
+                    // If the token is not forwarded, it must be deactivated
+                    processInstance.Tokens[command.Token.Id].Status = TokenStatus.Inactive;
+                }
+            }
+            else
+            {
+                commands.Add(new ProceedTokenCommand() { Token = command.Token });
+            }
         }
     }
 }
