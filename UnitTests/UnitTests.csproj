@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Bpmn\LoadDiagram_ParallelGateway_Tests.cs" />
     <Compile Include="Bpmn\LoadDiagram_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunEngine\TestRunEngine.cs" />
@@ -67,6 +68,9 @@
       <Project>{239ec179-8bf4-4ba0-9082-62bd3fcd8eb7}</Project>
       <Name>DotBpm</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Bpmn\diagram_parallelgateway.bpmn" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

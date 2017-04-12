@@ -43,8 +43,19 @@ namespace DotBpm.Bpmn
             ParseServiceTasks(process, processElement);
             ParseSequenceFlows(process, processElement);
             ParseEndEvents(process, processElement);
+            ParseParallelGateway(process, processElement);
 
             return process;
+        }
+
+        private void ParseParallelGateway(BpmnProcess process, XmlElement processElement)
+        {
+            foreach (var parallelGatewayElement in processElement.GetElementsByTagName("parallelGateway", NS_BPMNMODEL).OfType<XmlElement>())
+            {
+                var parallelGateway = new BpmnParallelGateway();
+                ParseBpmnFlowNode(parallelGateway, parallelGatewayElement);
+                process.Elements.Add(parallelGateway);
+            }
         }
 
         private void ParseStartEvents(BpmnProcess process, XmlElement processElement)
@@ -52,7 +63,6 @@ namespace DotBpm.Bpmn
             foreach(var startEventElement in processElement.GetElementsByTagName("startEvent", NS_BPMNMODEL).OfType<XmlElement>())
             {
                 var startEvent = new BpmnStartEvent();
-                ParseBpmnFlowElement(startEvent, startEventElement);
                 ParseBpmnFlowNode(startEvent, startEventElement);
                 process.Elements.Add(startEvent);
             }
@@ -62,8 +72,7 @@ namespace DotBpm.Bpmn
         {
             foreach (var endEventElement in processElement.GetElementsByTagName("endEvent", NS_BPMNMODEL).OfType<XmlElement>())
             {
-                var endEvent = new BpmnEndEvent();
-                ParseBpmnFlowElement(endEvent, endEventElement);
+                var endEvent = new BpmnEndEvent();                
                 ParseBpmnFlowNode(endEvent, endEventElement);
                 process.Elements.Add(endEvent);
             }
@@ -92,7 +101,6 @@ namespace DotBpm.Bpmn
 
         private void ParseTask(XmlElement taskElement, BpmnTask task)
         {
-            ParseBpmnFlowElement(task, taskElement);
             ParseBpmnFlowNode(task, taskElement);   
         }
 
@@ -125,6 +133,8 @@ namespace DotBpm.Bpmn
             {
                 bpmnFlowNode.Outgoing.Add(outgoing.InnerText);
             }
+
+            ParseBpmnFlowElement(bpmnFlowNode, bpmnElement);
         }
     }
 }

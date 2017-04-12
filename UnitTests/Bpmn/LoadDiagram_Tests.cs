@@ -8,7 +8,7 @@ using DotBpm.Bpmn.BpmnModel;
 namespace UnitTests
 {
     [TestClass]
-    public class UnitTest1
+    public class LoadDiagram_Tests
     {
         [TestMethod]
         public void LoadDiagram_Test()
