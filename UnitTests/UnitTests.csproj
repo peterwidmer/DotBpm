@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Bpmn\LoadDiagram_ExclusiveGateway_Tests.cs" />
     <Compile Include="Bpmn\LoadDiagram_ParallelGateway_Tests.cs" />
     <Compile Include="Bpmn\LoadDiagram_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Bpmn\diagram_parallelgateway.bpmn" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Bpmn\diagram_exclusivegateway.bpmn" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

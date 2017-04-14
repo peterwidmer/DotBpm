@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnActivity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnBaseElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnEndEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnExclusiveGateway.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFlowElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFlowNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnGateway.cs" />

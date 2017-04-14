@@ -44,6 +44,7 @@ namespace DotBpm.Bpmn
             ParseSequenceFlows(process, processElement);
             ParseEndEvents(process, processElement);
             ParseParallelGateway(process, processElement);
+            ParseExclusiveGateway(process, processElement);
 
             return process;
         }
@@ -55,6 +56,16 @@ namespace DotBpm.Bpmn
                 var parallelGateway = new BpmnParallelGateway();
                 ParseBpmnFlowNode(parallelGateway, parallelGatewayElement);
                 process.Elements.Add(parallelGateway);
+            }
+        }
+
+        private void ParseExclusiveGateway(BpmnProcess process, XmlElement processElement)
+        {
+            foreach (var exclusiveGatewayElement in processElement.GetElementsByTagName("exclusiveGateway", NS_BPMNMODEL).OfType<XmlElement>())
+            {
+                var exclusiveGateway = new BpmnExclusiveGateway();
+                ParseBpmnFlowNode(exclusiveGateway, exclusiveGatewayElement);
+                process.Elements.Add(exclusiveGateway);
             }
         }
 
