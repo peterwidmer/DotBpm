@@ -10,5 +10,11 @@ namespace DotBpm.Bpmn.BpmnModel
     {
         public string SourceRef { get; set; }
         public string TargetRef { get; set; }
+        public BpmnFormalExpression ConditionExpression { get; set; }
+
+        public BpmnSequenceFlow()
+        {
+            ConditionExpression = new BpmnFormalExpression();
+        }
     }
 }

@@ -13,8 +13,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnBaseElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnEndEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnExclusiveGateway.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnExpression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFlowElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFlowNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnFormalExpression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnGateway.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnParallelGateway.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnProcess.cs" />

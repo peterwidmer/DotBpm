@@ -30,6 +30,10 @@ namespace UnitTests.Bpmn
             Assert.AreEqual("Exclusivegateway 1", exclusiveGateway1.Name);
             Assert.AreEqual(1, exclusiveGateway1.Incoming.Count);
             Assert.AreEqual(2, exclusiveGateway1.Outgoing.Count);
+
+            var seq_parallelgateway_1_test_task_2 = (BpmnSequenceFlow)process.Elements.FirstOrDefault(t => t.Id == "seq_parallelgateway_1_test_task_2");
+            Assert.AreEqual("javascript", seq_parallelgateway_1_test_task_2.ConditionExpression.Language);
+            Assert.AreEqual("return ${decisiontaskresult} == 'test_task_2';", seq_parallelgateway_1_test_task_2.ConditionExpression.Body);
         }
     }
 }

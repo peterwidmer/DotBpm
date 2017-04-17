@@ -122,15 +122,32 @@ namespace DotBpm.Bpmn
                 var sequenceFlow = new BpmnSequenceFlow();
                 sequenceFlow.SourceRef = sequenceFlowElement.GetAttribute("sourceRef");
                 sequenceFlow.TargetRef = sequenceFlowElement.GetAttribute("targetRef");
+                ParseBpmnConditionExpression(sequenceFlow, sequenceFlowElement);
                 ParseBpmnFlowElement(sequenceFlow, sequenceFlowElement);
                 process.Elements.Add(sequenceFlow);
             }
         }
 
+        private void ParseBpmnConditionExpression(BpmnSequenceFlow bpmnSequenceFlow, XmlElement sequenceFlowElement)
+        {
+            var conditionExpressionElement = sequenceFlowElement.GetElementsByTagName("conditionExpression", NS_BPMNMODEL).OfType<XmlElement>().FirstOrDefault();
+            if(conditionExpressionElement != null)
+            {
+                ParseBpmnBaseElement(bpmnSequenceFlow.ConditionExpression, conditionExpressionElement);
+                bpmnSequenceFlow.ConditionExpression.Language = conditionExpressionElement.GetAttribute("language");
+                bpmnSequenceFlow.ConditionExpression.Body = conditionExpressionElement.InnerText;
+            }
+        }
+
         private void ParseBpmnFlowElement(BpmnFlowElement bpmnFlowElement, XmlElement bpmnElement)
         {
-            bpmnFlowElement.Id = bpmnElement.GetAttribute("id");
+            ParseBpmnBaseElement(bpmnFlowElement, bpmnElement);
             bpmnFlowElement.Name = bpmnElement.GetAttribute("name");
+        }
+
+        private void ParseBpmnBaseElement(BpmnBaseElement bpmnBase, XmlElement bpmnBaseElememt)
+        {
+            bpmnBase.Id = bpmnBaseElememt.GetAttribute("id");
         }
 
         private void ParseBpmnFlowNode(BpmnFlowNode bpmnFlowNode, XmlElement bpmnElement)

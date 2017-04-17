@@ -16,9 +16,11 @@
       <bpmn:outgoing>seq_test_task_2_parallelgateway_2</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="seq_parallelgateway_1_test_task_2" sourceRef="exclusive_gateway_1" targetRef="test_task_2">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript"><![CDATA[return ${decisiontaskresult} == 'test_task_2';]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="seq_parallelgateway_1_test_task_1" sourceRef="exclusive_gateway_1" targetRef="test_task_1" />
+    <bpmn:sequenceFlow id="seq_parallelgateway_1_test_task_1" sourceRef="exclusive_gateway_1" targetRef="test_task_1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript"><![CDATA[return ${decisiontaskresult} == 'test_task_1';]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="seq_test_task_2_parallelgateway_2" sourceRef="test_task_2" targetRef="exclusive_gateway_2" />
     <bpmn:sequenceFlow id="seq_test_task_1_parallelgateway_2" sourceRef="test_task_1" targetRef="exclusive_gateway_2" />
     <bpmn:sequenceFlow id="seq_parallelgateway_2_test_task_3" sourceRef="exclusive_gateway_2" targetRef="endevent_1" />
