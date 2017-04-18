@@ -19,5 +19,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ProcessToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServiceTaskContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TokenStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExecutionScope.cs" />
   </ItemGroup>
 </Project>

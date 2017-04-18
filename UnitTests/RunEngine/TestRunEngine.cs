@@ -5,6 +5,7 @@ using Engines;
 using StorageEngine;
 using DotBpm.Bpmn;
 using System.Xml;
+using DotBpm.StorageEngine;
 
 namespace UnitTests
 {
@@ -15,8 +16,9 @@ namespace UnitTests
         public void TestRunEngine_SimpleRun()
         {
             var processInstance = CreateProcessInstance("UnitTests.Bpmn.diagram.bpmn", "diagram_process");
+            var executionScopeStore = new ExecutionScopeStore_InMemory();
 
-            RunEngine runEngine = new RunEngine(processInstance);
+            RunEngine runEngine = new RunEngine(processInstance, executionScopeStore);
             var task = runEngine.ExecuteProcess();
             task.Wait();
         }
@@ -25,8 +27,9 @@ namespace UnitTests
         public void TestRunEngine_ParallelGatewayRun()
         {
             var processInstance = CreateProcessInstance("UnitTests.Bpmn.diagram_parallelgateway.bpmn", "diagram_parallelgateway_process");
+            var executionScopeStore = new ExecutionScopeStore_InMemory();
 
-            RunEngine runEngine = new RunEngine(processInstance);
+            RunEngine runEngine = new RunEngine(processInstance, executionScopeStore);
             var task = runEngine.ExecuteProcess();
             task.Wait();
         }

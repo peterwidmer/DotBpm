@@ -10,17 +10,20 @@ using DotBpm.Bpmn.BpmnModel;
 using System.Diagnostics;
 using DotBpm.ServiceTask;
 using System.ComponentModel;
+using DotBpm.StorageEngine;
 
 namespace Engines
 {
     public class RunEngine
     {
         private ProcessInstance processInstance;
+        private IExecutionScopeStore executionScopeStore;
         private BlockingCollection<Command> commands = new BlockingCollection<Command>();
 
-        public RunEngine(ProcessInstance processInstance)
+        public RunEngine(ProcessInstance processInstance, IExecutionScopeStore executionScopeStore)
         {
             this.processInstance = processInstance;
+            this.executionScopeStore = executionScopeStore;
         }
 
         public async Task ExecuteProcess()
@@ -118,7 +121,7 @@ namespace Engines
             if(currentBpmnElement is BpmnServiceTask)
             {
                 var sleepTask = new SleepTask();
-                sleepTask.Execute(new ServiceTaskContext(command.Token));
+                sleepTask.Execute(new ServiceTaskContext(command.Token, executionScopeStore.Create()));
             }
 
             if (currentBpmnElement is BpmnParallelGateway)
