@@ -179,11 +179,11 @@ namespace Engines
                 sleepTask.Execute(new ServiceTaskContext(command.Token, taskExecutionScope));
             }
 
-            if (currentBpmnElement is BpmnParallelGateway)
+            if (currentBpmnElement is BpmnGateway)
             {
-                var parallelGateway = (BpmnParallelGateway)currentBpmnElement;
+                var gateway = (BpmnGateway)currentBpmnElement;
                 int numberOfTokensReceivedOnGateway = processInstance.Tokens.Count(t => t.Value.CurrentElementId == command.Token.CurrentElementId);
-                if(parallelGateway.Incoming.Count == numberOfTokensReceivedOnGateway)
+                if(gateway.Incoming.Count == numberOfTokensReceivedOnGateway)
                 {
                     commands.Add(new ProceedTokenCommand() { Token = command.Token });
                 }
