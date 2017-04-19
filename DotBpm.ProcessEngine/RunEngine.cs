@@ -28,24 +28,45 @@ namespace Engines
 
         public async Task ExecuteProcess()
         {
+            await ExecuteProcess(new Dictionary<string, object>());
+        }
 
-            foreach (var startEvent in processInstance.BpmnProcess.Elements.OfType<BpmnStartEvent>())
-            {
-                var token = new ProcessToken(startEvent.Id);
-                processInstance.Tokens.Add(token.Id, token);
-                commands.Add(new ExecuteTokenCommand() { Token =  token});                
-            }
+        public async Task ExecuteProcess(Dictionary<string, object> variables)
+        {
+            InitializeProcessInstance(variables);
+            SetStartCommands();
 
             await Task.Run(() =>
             {
                 foreach (var command in commands.GetConsumingEnumerable())
                 {
-                    BackgroundWorker bgw = new BackgroundWorker();
-                    bgw.DoWork += Bgw_DoWork;
-                    bgw.RunWorkerCompleted += Bgw_RunWorkerCompleted;
-                    bgw.RunWorkerAsync(command);                    
+                    ExecuteBackgroundWorker(command);                 
                 }
             });
+        }
+
+        private void InitializeProcessInstance(Dictionary<string, object> variables)
+        {
+            processInstance.ExecutionScope = executionScopeStore.Create();
+            processInstance.ExecutionScope.Variables = variables;
+        }
+
+        private void SetStartCommands()
+        {
+            foreach (var startEvent in processInstance.BpmnProcess.Elements.OfType<BpmnStartEvent>())
+            {
+                var token = new ProcessToken(startEvent.Id);
+                processInstance.Tokens.Add(token.Id, token);
+                commands.Add(new ExecuteTokenCommand() { Token = token });
+            }
+        }
+
+        private void ExecuteBackgroundWorker(Command command)
+        {
+            BackgroundWorker bgw = new BackgroundWorker();
+            bgw.DoWork += Bgw_DoWork;
+            bgw.RunWorkerCompleted += Bgw_RunWorkerCompleted;
+            bgw.RunWorkerAsync(command);
         }
 
         private void Bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -87,8 +108,11 @@ namespace Engines
                     Trace.WriteLine("Token on : " + command.Token.CurrentElementId);
                     
                     var sequenceFlow = (BpmnSequenceFlow)currentBpmnElement;
-                    
-                    var token = new ProcessToken(sequenceFlow.TargetRef);
+                    HandleSequenceConditionExpression(command, sequenceFlow.ConditionExpression);
+
+                    // The new token must take the status of the previous token over, so that inactive token proceed
+                    // further as inactive tokens
+                    var token = new ProcessToken(sequenceFlow.TargetRef, command.Token.Status);
                     processInstance.Tokens.Add(token.Id, token);
                     commands.Add(new ExecuteTokenCommand() { Token = token });
                 }
@@ -99,7 +123,9 @@ namespace Engines
 
                     foreach (var outgoing in flowNode.Outgoing)
                     {
-                        var token = new ProcessToken(outgoing);
+                        // The new token must take the status of the previous token over, so that inactive token proceed
+                        // further as inactive tokens
+                        var token = new ProcessToken(outgoing, command.Token.Status);
                         processInstance.Tokens.Add(token.Id, token);
                         commands.Add(new ProceedTokenCommand() { Token = token });
                     }
@@ -113,15 +139,44 @@ namespace Engines
             }
         }
 
+        private void HandleSequenceConditionExpression(ProceedTokenCommand command, BpmnFormalExpression conditionExpression)
+        {
+            if(string.IsNullOrEmpty(conditionExpression.Language) || string.IsNullOrEmpty(conditionExpression.Body))
+            {
+                return;
+            }
+
+            string script = "function ExecuteConditionExpression() {\n" + conditionExpression.Body + "\n}\nExecuteConditionExpression();";
+            foreach (var variable in processInstance.ExecutionScope.Variables)
+            {
+                script = script.Replace("${" + variable.Key + "}", variable.Value.ToString());
+            }
+
+            var engine = new Jint.Engine();
+            var result = engine.Execute(script)
+                .GetCompletionValue() // get the latest statement completion value
+                .ToObject(); // converts the value to .NET
+
+            if(!(bool)result)
+            {
+                command.Token.Status = TokenStatus.Inactive;
+            }
+        }
+
         private void HandleExecuteTokenCommand(ExecuteTokenCommand command)
         {
-            Trace.WriteLine("Token on : " + command.Token.CurrentElementId);
-            processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;
+            Trace.WriteLine("Token on : " + command.Token.CurrentElementId + " with status " + command.Token.Status);
+            
             var currentBpmnElement = processInstance.BpmnProcess.Elements.First(t => t.Id == command.Token.CurrentElementId);
-            if(currentBpmnElement is BpmnServiceTask)
+            if(currentBpmnElement is BpmnServiceTask && command.Token.Status == TokenStatus.Active)
             {
+                processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;
+
+                var taskExecutionScope = executionScopeStore.Create();
+                taskExecutionScope.ParentScope = processInstance.ExecutionScope;
+
                 var sleepTask = new SleepTask();
-                sleepTask.Execute(new ServiceTaskContext(command.Token, executionScopeStore.Create()));
+                sleepTask.Execute(new ServiceTaskContext(command.Token, taskExecutionScope));
             }
 
             if (currentBpmnElement is BpmnParallelGateway)

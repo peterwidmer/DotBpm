@@ -33,7 +33,7 @@ namespace UnitTests.Bpmn
 
             var seq_parallelgateway_1_test_task_2 = (BpmnSequenceFlow)process.Elements.FirstOrDefault(t => t.Id == "seq_parallelgateway_1_test_task_2");
             Assert.AreEqual("javascript", seq_parallelgateway_1_test_task_2.ConditionExpression.Language);
-            Assert.AreEqual("return ${decisiontaskresult} == 'test_task_2';", seq_parallelgateway_1_test_task_2.ConditionExpression.Body);
+            Assert.AreEqual("return '${decision}' == 'test_task_2';", seq_parallelgateway_1_test_task_2.ConditionExpression.Body);
         }
     }
 }

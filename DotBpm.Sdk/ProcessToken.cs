@@ -8,7 +8,7 @@ namespace DotBpm.Sdk
 {
     public class ProcessToken
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; }
         public string CurrentElementId { get; }
         public TokenStatus Status { get; set; }
 
@@ -16,6 +16,13 @@ namespace DotBpm.Sdk
         {
             Id = Guid.NewGuid();
             CurrentElementId = currentElementId;
+        }
+
+        public ProcessToken(string currentElementId, TokenStatus status)
+        {
+            Id = Guid.NewGuid();
+            CurrentElementId = currentElementId;
+            Status = status;
         }
     }
 }

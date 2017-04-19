@@ -12,14 +12,19 @@
       <bpmn:outgoing>seq_test_task_1_parallelgateway_2</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="test_task_2" name="Test Task 2" camunda:class="DotBpm.ServiceTask.SleepTask">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="Input_1a47353">test</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>seq_parallelgateway_1_test_task_2</bpmn:incoming>
       <bpmn:outgoing>seq_test_task_2_parallelgateway_2</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="seq_parallelgateway_1_test_task_2" sourceRef="exclusive_gateway_1" targetRef="test_task_2">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript"><![CDATA[return ${decisiontaskresult} == 'test_task_2';]]></bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript"><![CDATA[return '${decision}' == 'test_task_2';]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="seq_parallelgateway_1_test_task_1" sourceRef="exclusive_gateway_1" targetRef="test_task_1">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript"><![CDATA[return ${decisiontaskresult} == 'test_task_1';]]></bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript"><![CDATA[return '${decision}' == 'test_task_1';]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="seq_test_task_2_parallelgateway_2" sourceRef="test_task_2" targetRef="exclusive_gateway_2" />
     <bpmn:sequenceFlow id="seq_test_task_1_parallelgateway_2" sourceRef="test_task_1" targetRef="exclusive_gateway_2" />
@@ -34,7 +39,7 @@
       <bpmn:incoming>seq_test_task_1_parallelgateway_2</bpmn:incoming>
       <bpmn:outgoing>seq_parallelgateway_2_test_task_3</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:task id="desision_task" name="Decision Task">
+    <bpmn:task id="desision_task" name="Pre Task">
       <bpmn:incoming>seq_start_decision_task</bpmn:incoming>
       <bpmn:outgoing>seq_decision_task_exclusive_gateway</bpmn:outgoing>
     </bpmn:task>
