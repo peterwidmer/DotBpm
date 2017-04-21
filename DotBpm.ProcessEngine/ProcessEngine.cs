@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace Engines
 {
@@ -34,8 +34,7 @@ namespace Engines
         {
             var processDefinition = processDefinitionStore.Load(processName);
 
-            var bpmnDocument = new XmlDocument();
-            bpmnDocument.LoadXml(processDefinition.BpmnContent);
+            var bpmnDocument = XDocument.Parse(processDefinition.BpmnContent);
 
             var bpmnParser = new BpmnParser(bpmnDocument);
             return bpmnParser.Parse();

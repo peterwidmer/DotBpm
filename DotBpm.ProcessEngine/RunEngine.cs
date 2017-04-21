@@ -53,7 +53,7 @@ namespace Engines
 
         private void SetStartCommands()
         {
-            foreach (var startEvent in processInstance.BpmnProcess.Elements.OfType<BpmnStartEvent>())
+            foreach (var startEvent in processInstance.BpmnProcess.Artifacts.OfType<BpmnStartEvent>())
             {
                 var token = new ProcessToken(startEvent.Id);
                 processInstance.Tokens.Add(token.Id, token);
@@ -101,7 +101,7 @@ namespace Engines
         {
             lock (processInstance.Tokens)
             {
-                var currentBpmnElement = processInstance.BpmnProcess.Elements.First(t => t.Id == command.Token.CurrentElementId);
+                var currentBpmnElement = processInstance.BpmnProcess.Artifacts.First(t => t.Id == command.Token.CurrentElementId);
                 if (currentBpmnElement is BpmnSequenceFlow)
                 {
                     // Next must be an Element
@@ -167,7 +167,7 @@ namespace Engines
         {
             Trace.WriteLine("Token on : " + command.Token.CurrentElementId + " with status " + command.Token.Status);
             
-            var currentBpmnElement = processInstance.BpmnProcess.Elements.First(t => t.Id == command.Token.CurrentElementId);
+            var currentBpmnElement = processInstance.BpmnProcess.Artifacts.First(t => t.Id == command.Token.CurrentElementId);
             if(currentBpmnElement is BpmnServiceTask && command.Token.Status == TokenStatus.Active)
             {
                 processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;

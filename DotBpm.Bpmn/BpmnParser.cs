@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
+
+using System.Xml.Linq;
 
 namespace DotBpm.Bpmn
 {
@@ -13,17 +14,17 @@ namespace DotBpm.Bpmn
         public const string NS_BPMNMODEL = "http://www.omg.org/spec/BPMN/20100524/MODEL";
         public const string NS_CAMUNDA = "http://camunda.org/schema/1.0/bpmn";
 
-        private XmlDocument bpmnDocument;
+        private XDocument bpmnDocument;
         private List<BpmnProcess> Processes = new List<BpmnProcess>();
 
-        public BpmnParser(XmlDocument bpmnDocument)
+        public BpmnParser(XDocument bpmnDocument)
         {
             this.bpmnDocument = bpmnDocument;
         }
 
         public BpmnProcess Parse()
         {
-            foreach(var processElement in bpmnDocument.GetElementsByTagName("process", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach(var processElement in bpmnDocument.Descendants("{" + NS_BPMNMODEL + "}" + "process"))
             {
                 var process = ParseProcess(processElement);
                 Processes.Add(process);
@@ -32,134 +33,151 @@ namespace DotBpm.Bpmn
             return Processes.FirstOrDefault();
         }
 
-        private BpmnProcess ParseProcess(XmlElement processElement)
+        private BpmnProcess ParseProcess(XElement processElement)
         {
             BpmnProcess process = new BpmnProcess();
-            process.Id = processElement.GetAttribute("id");
+            process.Id = processElement.Attribute("id")?.Value;
             process.IsExecutable = BpmnXmlHelper.GetAttributeBoolean(processElement, "isExecutable");
 
-            ParseStartEvents(process, processElement);
-            ParseTasks(process, processElement);
-            ParseServiceTasks(process, processElement);
-            ParseSequenceFlows(process, processElement);
-            ParseEndEvents(process, processElement);
-            ParseParallelGateway(process, processElement);
-            ParseExclusiveGateway(process, processElement);
+            ParseArtifacts(process.Artifacts, processElement);
 
             return process;
         }
 
-        private void ParseParallelGateway(BpmnProcess process, XmlElement processElement)
+        private void ParseArtifacts(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var parallelGatewayElement in processElement.GetElementsByTagName("parallelGateway", NS_BPMNMODEL).OfType<XmlElement>())
+            ParseStartEvents(artifacts, processElement);
+            ParseTasks(artifacts, processElement);
+            ParseServiceTasks(artifacts, processElement);
+            ParseSequenceFlows(artifacts, processElement);
+            ParseEndEvents(artifacts, processElement);
+            ParseParallelGateway(artifacts, processElement);
+            ParseExclusiveGateway(artifacts, processElement);
+            ParseSubProcess(artifacts, processElement);
+        }
+
+        private void ParseSubProcess(List<BpmnBaseElement> artifacts, XElement processElement)
+        {
+            foreach (var subProcessElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "subProcess"))
+            {
+                var subProcess = new BpmnSubProcess();
+                subProcess.Id = subProcessElement.Attribute("id")?.Value;
+                ParseArtifacts(subProcess.Artifacts, subProcessElement);
+                artifacts.Add(subProcess);
+            }
+        }
+
+        private void ParseParallelGateway(List<BpmnBaseElement> artifacts, XElement processElement)
+        {
+            foreach (var parallelGatewayElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "parallelGateway"))
             {
                 var parallelGateway = new BpmnParallelGateway();
                 ParseBpmnFlowNode(parallelGateway, parallelGatewayElement);
-                process.Elements.Add(parallelGateway);
+                artifacts.Add(parallelGateway);
             }
         }
 
-        private void ParseExclusiveGateway(BpmnProcess process, XmlElement processElement)
+        private void ParseExclusiveGateway(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var exclusiveGatewayElement in processElement.GetElementsByTagName("exclusiveGateway", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach (var exclusiveGatewayElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "exclusiveGateway"))
             {
                 var exclusiveGateway = new BpmnExclusiveGateway();
                 ParseBpmnFlowNode(exclusiveGateway, exclusiveGatewayElement);
-                process.Elements.Add(exclusiveGateway);
+                artifacts.Add(exclusiveGateway);
             }
         }
 
-        private void ParseStartEvents(BpmnProcess process, XmlElement processElement)
+        private void ParseStartEvents(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach(var startEventElement in processElement.GetElementsByTagName("startEvent", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach (var startEventElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "startEvent"))
             {
                 var startEvent = new BpmnStartEvent();
                 ParseBpmnFlowNode(startEvent, startEventElement);
-                process.Elements.Add(startEvent);
+                artifacts.Add(startEvent);
             }
         }
 
-        private void ParseEndEvents(BpmnProcess process, XmlElement processElement)
+        private void ParseEndEvents(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var endEventElement in processElement.GetElementsByTagName("endEvent", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach (var endEventElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "endEvent"))
             {
                 var endEvent = new BpmnEndEvent();                
                 ParseBpmnFlowNode(endEvent, endEventElement);
-                process.Elements.Add(endEvent);
+                artifacts.Add(endEvent);
             }
         }
 
-        private void ParseTasks(BpmnProcess process, XmlElement processElement)
+        private void ParseTasks(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var taskElement in processElement.GetElementsByTagName("task", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach (var taskElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "task"))
             {
                 var task = new BpmnTask();
                 ParseTask(taskElement, task);
-                process.Elements.Add(task);
+                artifacts.Add(task);
             }
         }
 
-        private void ParseServiceTasks(BpmnProcess process, XmlElement processElement)
+        private void ParseServiceTasks(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var taskElement in processElement.GetElementsByTagName("serviceTask", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach (var taskElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "serviceTask"))
             {
                 var serviceTask = new BpmnServiceTask();
-                serviceTask.Class = taskElement.GetAttribute("class", NS_CAMUNDA);
+                serviceTask.Class = taskElement.Attribute("{" + NS_CAMUNDA + "}" + "class")?.Value;
                 ParseTask(taskElement, serviceTask);
-                process.Elements.Add(serviceTask);
+                artifacts.Add(serviceTask);
             }
         }
 
-        private void ParseTask(XmlElement taskElement, BpmnTask task)
+        private void ParseTask(XElement taskElement, BpmnTask task)
         {
             ParseBpmnFlowNode(task, taskElement);   
         }
 
-        public void ParseSequenceFlows(BpmnProcess process, XmlElement processElement)
+        public void ParseSequenceFlows(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var sequenceFlowElement in processElement.GetElementsByTagName("sequenceFlow", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach (var sequenceFlowElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "sequenceFlow"))
             {
                 var sequenceFlow = new BpmnSequenceFlow();
-                sequenceFlow.SourceRef = sequenceFlowElement.GetAttribute("sourceRef");
-                sequenceFlow.TargetRef = sequenceFlowElement.GetAttribute("targetRef");
+                sequenceFlow.SourceRef = sequenceFlowElement.Attribute("sourceRef")?.Value;
+                sequenceFlow.TargetRef = sequenceFlowElement.Attribute("targetRef")?.Value;
                 ParseBpmnConditionExpression(sequenceFlow, sequenceFlowElement);
                 ParseBpmnFlowElement(sequenceFlow, sequenceFlowElement);
-                process.Elements.Add(sequenceFlow);
+                artifacts.Add(sequenceFlow);
             }
         }
 
-        private void ParseBpmnConditionExpression(BpmnSequenceFlow bpmnSequenceFlow, XmlElement sequenceFlowElement)
+        private void ParseBpmnConditionExpression(BpmnSequenceFlow bpmnSequenceFlow, XElement sequenceFlowElement)
         {
-            var conditionExpressionElement = sequenceFlowElement.GetElementsByTagName("conditionExpression", NS_BPMNMODEL).OfType<XmlElement>().FirstOrDefault();
+            var conditionExpressionElement = sequenceFlowElement.Descendants("{" + NS_BPMNMODEL + "}" + ("conditionExpression")).FirstOrDefault();
             if(conditionExpressionElement != null)
             {
                 ParseBpmnBaseElement(bpmnSequenceFlow.ConditionExpression, conditionExpressionElement);
-                bpmnSequenceFlow.ConditionExpression.Language = conditionExpressionElement.GetAttribute("language");
-                bpmnSequenceFlow.ConditionExpression.Body = conditionExpressionElement.InnerText;
+                bpmnSequenceFlow.ConditionExpression.Language = conditionExpressionElement.Attribute("language")?.Value;
+                bpmnSequenceFlow.ConditionExpression.Body = conditionExpressionElement.Value;
             }
         }
 
-        private void ParseBpmnFlowElement(BpmnFlowElement bpmnFlowElement, XmlElement bpmnElement)
+        private void ParseBpmnFlowElement(BpmnFlowElement bpmnFlowElement, XElement bpmnElement)
         {
             ParseBpmnBaseElement(bpmnFlowElement, bpmnElement);
-            bpmnFlowElement.Name = bpmnElement.GetAttribute("name");
+            bpmnFlowElement.Name = bpmnElement.Attribute("name")?.Value;
         }
 
-        private void ParseBpmnBaseElement(BpmnBaseElement bpmnBase, XmlElement bpmnBaseElememt)
+        private void ParseBpmnBaseElement(BpmnBaseElement bpmnBase, XElement bpmnBaseElememt)
         {
-            bpmnBase.Id = bpmnBaseElememt.GetAttribute("id");
+            bpmnBase.Id = bpmnBaseElememt.Attribute("id")?.Value;
         }
 
-        private void ParseBpmnFlowNode(BpmnFlowNode bpmnFlowNode, XmlElement bpmnElement)
+        private void ParseBpmnFlowNode(BpmnFlowNode bpmnFlowNode, XElement bpmnElement)
         {
-            foreach(var incoming in bpmnElement.GetElementsByTagName("incoming", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach(var incoming in bpmnElement.Descendants("{" + NS_BPMNMODEL + "}" + "incoming"))
             {
-                bpmnFlowNode.Incoming.Add(incoming.InnerText);
+                bpmnFlowNode.Incoming.Add(incoming.Value);
             }
 
-            foreach (var outgoing in bpmnElement.GetElementsByTagName("outgoing", NS_BPMNMODEL).OfType<XmlElement>())
+            foreach (var outgoing in bpmnElement.Descendants("{" + NS_BPMNMODEL + "}" + "outgoing"))
             {
-                bpmnFlowNode.Outgoing.Add(outgoing.InnerText);
+                bpmnFlowNode.Outgoing.Add(outgoing.Value);
             }
 
             ParseBpmnFlowElement(bpmnFlowNode, bpmnElement);

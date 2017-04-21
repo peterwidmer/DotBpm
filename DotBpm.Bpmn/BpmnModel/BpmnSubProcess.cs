@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DotBpm.Bpmn.BpmnModel
 {
-    public class BpmnProcess : BpmnBaseElement
+    public class BpmnSubProcess : BpmnActivity
     {
-        public bool IsExecutable { get; set; }
-
         public List<BpmnBaseElement> Artifacts { get; set; }
 
-        public BpmnProcess()
+        public BpmnSubProcess()
         {
             Artifacts = new List<BpmnBaseElement>();
         }
