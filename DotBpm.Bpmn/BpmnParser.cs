@@ -24,7 +24,7 @@ namespace DotBpm.Bpmn
 
         public BpmnProcess Parse()
         {
-            foreach(var processElement in bpmnDocument.Descendants("{" + NS_BPMNMODEL + "}" + "process"))
+            foreach(var processElement in bpmnDocument.Root.Elements("{" + NS_BPMNMODEL + "}" + "process"))
             {
                 var process = ParseProcess(processElement);
                 process.IndexArtifacts();
@@ -63,7 +63,7 @@ namespace DotBpm.Bpmn
 
         private void ParseSubProcess(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var subProcessElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "subProcess"))
+            foreach (var subProcessElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "subProcess"))
             {
                 var subProcess = new BpmnSubProcess();
                 subProcess.Id = subProcessElement.Attribute("id")?.Value;
@@ -74,7 +74,7 @@ namespace DotBpm.Bpmn
 
         private void ParseParallelGateway(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var parallelGatewayElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "parallelGateway"))
+            foreach (var parallelGatewayElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "parallelGateway"))
             {
                 var parallelGateway = new BpmnParallelGateway();
                 ParseBpmnFlowNode(parallelGateway, parallelGatewayElement);
@@ -84,7 +84,7 @@ namespace DotBpm.Bpmn
 
         private void ParseExclusiveGateway(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var exclusiveGatewayElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "exclusiveGateway"))
+            foreach (var exclusiveGatewayElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "exclusiveGateway"))
             {
                 var exclusiveGateway = new BpmnExclusiveGateway();
                 ParseBpmnFlowNode(exclusiveGateway, exclusiveGatewayElement);
@@ -94,7 +94,7 @@ namespace DotBpm.Bpmn
 
         private void ParseStartEvents(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var startEventElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "startEvent"))
+            foreach (var startEventElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "startEvent"))
             {
                 var startEvent = new BpmnStartEvent();
                 ParseBpmnFlowNode(startEvent, startEventElement);
@@ -104,7 +104,7 @@ namespace DotBpm.Bpmn
 
         private void ParseEndEvents(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var endEventElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "endEvent"))
+            foreach (var endEventElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "endEvent"))
             {
                 var endEvent = new BpmnEndEvent();                
                 ParseBpmnFlowNode(endEvent, endEventElement);
@@ -114,7 +114,7 @@ namespace DotBpm.Bpmn
 
         private void ParseTasks(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var taskElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "task"))
+            foreach (var taskElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "task"))
             {
                 var task = new BpmnTask();
                 ParseTask(taskElement, task);
@@ -124,7 +124,7 @@ namespace DotBpm.Bpmn
 
         private void ParseServiceTasks(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var taskElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "serviceTask"))
+            foreach (var taskElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "serviceTask"))
             {
                 var serviceTask = new BpmnServiceTask();
                 serviceTask.Class = taskElement.Attribute("{" + NS_CAMUNDA + "}" + "class")?.Value;
@@ -140,7 +140,7 @@ namespace DotBpm.Bpmn
 
         public void ParseSequenceFlows(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var sequenceFlowElement in processElement.Descendants("{" + NS_BPMNMODEL + "}" + "sequenceFlow"))
+            foreach (var sequenceFlowElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "sequenceFlow"))
             {
                 var sequenceFlow = new BpmnSequenceFlow();
                 sequenceFlow.SourceRef = sequenceFlowElement.Attribute("sourceRef")?.Value;
@@ -153,7 +153,7 @@ namespace DotBpm.Bpmn
 
         private void ParseBpmnConditionExpression(BpmnSequenceFlow bpmnSequenceFlow, XElement sequenceFlowElement)
         {
-            var conditionExpressionElement = sequenceFlowElement.Descendants("{" + NS_BPMNMODEL + "}" + ("conditionExpression")).FirstOrDefault();
+            var conditionExpressionElement = sequenceFlowElement.Elements("{" + NS_BPMNMODEL + "}" + ("conditionExpression")).FirstOrDefault();
             if(conditionExpressionElement != null)
             {
                 ParseBpmnBaseElement(bpmnSequenceFlow.ConditionExpression, conditionExpressionElement);
@@ -175,12 +175,12 @@ namespace DotBpm.Bpmn
 
         private void ParseBpmnFlowNode(BpmnFlowNode bpmnFlowNode, XElement bpmnElement)
         {
-            foreach(var incoming in bpmnElement.Descendants("{" + NS_BPMNMODEL + "}" + "incoming"))
+            foreach(var incoming in bpmnElement.Elements("{" + NS_BPMNMODEL + "}" + "incoming"))
             {
                 bpmnFlowNode.Incoming.Add(incoming.Value);
             }
 
-            foreach (var outgoing in bpmnElement.Descendants("{" + NS_BPMNMODEL + "}" + "outgoing"))
+            foreach (var outgoing in bpmnElement.Elements("{" + NS_BPMNMODEL + "}" + "outgoing"))
             {
                 bpmnFlowNode.Outgoing.Add(outgoing.Value);
             }
