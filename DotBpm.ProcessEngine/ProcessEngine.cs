@@ -23,10 +23,9 @@ namespace Engines
         public ProcessInstance GetProcessInstance(string processName)
         {
             var bpmnProcess = LoadBpmnProcess(processName);
-            return new ProcessInstance()
+            return new ProcessInstance(bpmnProcess)
             {
                 Id = Guid.NewGuid(),
-                BpmnProcess = bpmnProcess
             };
         }
 

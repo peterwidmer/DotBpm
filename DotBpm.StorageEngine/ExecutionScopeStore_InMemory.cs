@@ -7,40 +7,45 @@ namespace DotBpm.StorageEngine
 {
     public class ExecutionScopeStore_InMemory : IExecutionScopeStore
     {
-        private List<ExecutionScope> executionScopes;
+        private Dictionary<string, ExecutionScope> executionScopes;
 
         public ExecutionScopeStore_InMemory()
         {
-            executionScopes = new List<ExecutionScope>();
+            executionScopes = new Dictionary<string, ExecutionScope>();
         }
 
-        public ExecutionScope Create()
+        public ExecutionScope Create(Guid processInstanceId, string bpmnElementId)
         {
-            var executionScope = new ExecutionScope();
+            var executionScope = new ExecutionScope(bpmnElementId);
             lock(executionScopes)
             {
-                executionScopes.Add(executionScope);
-                executionScope.Id = executionScopes.Count - 1;
+                executionScopes.Add(Key(processInstanceId, bpmnElementId), executionScope);
             }
 
             return executionScope;
         }
 
-        public ExecutionScope Create(int parentScopeId)
+        public ExecutionScope Create(Guid processInstanceId, string bpmnElementId, string parentBpmnElementId)
         {
-            var executionScope = Create();
-            executionScopes[executionScope.Id].ParentScope = executionScopes[parentScopeId];
+            var executionScope = Create(processInstanceId, bpmnElementId);
+            executionScope.ParentScope = executionScopes[Key(processInstanceId, parentBpmnElementId)];
+
             return executionScope;
         }
 
-        public ExecutionScope Load(int Id)
+        public ExecutionScope Load(Guid processInstanceId, string bpmnElementId)
         {
-            return executionScopes[Id];
+            return executionScopes[Key(processInstanceId, bpmnElementId)];
         }
 
-        public void Save(ExecutionScope executionScope)
+        public void Save(Guid processInstanceId, ExecutionScope executionScope)
         {
-            executionScopes[executionScope.Id] = executionScope;
+            executionScopes[Key(processInstanceId, executionScope.ScopeOfBpmnElementId)] = executionScope;
+        }
+
+        private string Key(Guid processInstanceId, string bpmnElementId)
+        {
+            return processInstanceId + bpmnElementId;
         }
     }
 }

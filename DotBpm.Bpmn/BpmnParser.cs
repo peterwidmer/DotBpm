@@ -27,6 +27,7 @@ namespace DotBpm.Bpmn
             foreach(var processElement in bpmnDocument.Descendants("{" + NS_BPMNMODEL + "}" + "process"))
             {
                 var process = ParseProcess(processElement);
+                process.IndexArtifacts();
                 Processes.Add(process);
             }
 
@@ -39,12 +40,12 @@ namespace DotBpm.Bpmn
             process.Id = processElement.Attribute("id")?.Value;
             process.IsExecutable = BpmnXmlHelper.GetAttributeBoolean(processElement, "isExecutable");
 
-            ParseArtifacts(process.Artifacts, processElement);
+            ParseArtifacts(process.Artifacts, processElement, process);
 
             return process;
         }
 
-        private void ParseArtifacts(List<BpmnBaseElement> artifacts, XElement processElement)
+        private void ParseArtifacts(List<BpmnBaseElement> artifacts, XElement processElement, BpmnBaseElement parentBpmnElement)
         {
             ParseStartEvents(artifacts, processElement);
             ParseTasks(artifacts, processElement);
@@ -54,6 +55,10 @@ namespace DotBpm.Bpmn
             ParseParallelGateway(artifacts, processElement);
             ParseExclusiveGateway(artifacts, processElement);
             ParseSubProcess(artifacts, processElement);
+            foreach(var artifact in artifacts)
+            {
+                artifact.ParentBpmnElement = parentBpmnElement;
+            }
         }
 
         private void ParseSubProcess(List<BpmnBaseElement> artifacts, XElement processElement)
@@ -62,7 +67,7 @@ namespace DotBpm.Bpmn
             {
                 var subProcess = new BpmnSubProcess();
                 subProcess.Id = subProcessElement.Attribute("id")?.Value;
-                ParseArtifacts(subProcess.Artifacts, subProcessElement);
+                ParseArtifacts(subProcess.Artifacts, subProcessElement, subProcess);
                 artifacts.Add(subProcess);
             }
         }

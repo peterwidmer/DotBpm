@@ -15,10 +15,10 @@ namespace DotBpm.Sdk
         public Dictionary<Guid, ProcessToken> Tokens { get; set; }
         public ExecutionScope ExecutionScope { get; set; }
 
-        public ProcessInstance()
+        public ProcessInstance(BpmnProcess bpmnProcess)
         {
+            BpmnProcess = bpmnProcess;
             Tokens = new Dictionary<Guid, ProcessToken>();
-            ExecutionScope = new ExecutionScope();
         }
     }
 }

@@ -6,12 +6,13 @@ namespace DotBpm.Sdk
 {
     public class ExecutionScope
     {
-        public int Id { get; set; }
+        public string ScopeOfBpmnElementId { get; set; }
         public ExecutionScope ParentScope { get; set; }
         public Dictionary<string, object> Variables { get; set; }
 
-        public ExecutionScope()
+        public ExecutionScope(string scopeOfBpmnElementId)
         {
+            ScopeOfBpmnElementId = scopeOfBpmnElementId;
             Variables = new Dictionary<string, object>();
         }
     }

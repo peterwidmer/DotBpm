@@ -7,9 +7,9 @@ namespace DotBpm.StorageEngine
 {
     public interface IExecutionScopeStore
     {
-        ExecutionScope Create();
-        ExecutionScope Create(int parentScopeId);
-        void Save(ExecutionScope executionScope);
-        ExecutionScope Load(int Id);
+        ExecutionScope Create(Guid processInstanceId, string bpmnElementId);
+        ExecutionScope Create(Guid processInstanceId, string bpmnElementId, string parentBpmnElementId);
+        void Save(Guid processInstanceId, ExecutionScope executionScope);
+        ExecutionScope Load(Guid processInstanceId, string bpmnElementId);
     }
 }

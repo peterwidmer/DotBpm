@@ -20,15 +20,19 @@ namespace UnitTests.Bpmn
             Assert.IsNotNull(subProcess1);
 
             var subTask1 = subProcess1.Artifacts.FirstOrDefault(t => t.Id == "sub_task_1");
+            Assert.AreEqual(subProcess1, subTask1.ParentBpmnElement);
             Assert.IsNotNull(subTask1);
 
             var subsubProcess1 = subProcess1.Artifacts.FirstOrDefault(t => t.Id == "sub_sub_process_1") as BpmnSubProcess;
+            Assert.AreEqual(subProcess1, subsubProcess1.ParentBpmnElement);
             Assert.IsNotNull(subsubProcess1);
 
             var subsubStartEvent = subsubProcess1.Artifacts.FirstOrDefault(t => t.Id == "sub_sub_start_event");
+            Assert.AreEqual(subsubProcess1, subsubStartEvent.ParentBpmnElement);
             Assert.IsNotNull(subsubStartEvent);
 
             var subsubTask2 = subsubProcess1.Artifacts.FirstOrDefault(t => t.Id == "sub_sub_task_2");
+            Assert.AreEqual(subsubProcess1, subsubTask2.ParentBpmnElement);
             Assert.IsNotNull(subsubTask2);
         }
     }

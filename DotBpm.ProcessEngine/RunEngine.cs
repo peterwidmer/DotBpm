@@ -47,7 +47,7 @@ namespace Engines
 
         private void InitializeProcessInstance(Dictionary<string, object> variables)
         {
-            processInstance.ExecutionScope = executionScopeStore.Create();
+            processInstance.ExecutionScope = executionScopeStore.Create(processInstance.Id, processInstance.BpmnProcess.Id);
             processInstance.ExecutionScope.Variables = variables;
         }
 
@@ -167,13 +167,12 @@ namespace Engines
         {
             Trace.WriteLine("Token on : " + command.Token.CurrentElementId + " with status " + command.Token.Status);
             
-            var currentBpmnElement = processInstance.BpmnProcess.Artifacts.First(t => t.Id == command.Token.CurrentElementId);
+            var currentBpmnElement = processInstance.BpmnProcess.ArtifactIndex[command.Token.CurrentElementId];
             if(currentBpmnElement is BpmnServiceTask && command.Token.Status == TokenStatus.Active)
             {
                 processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;
 
-                var taskExecutionScope = executionScopeStore.Create();
-                taskExecutionScope.ParentScope = processInstance.ExecutionScope;
+                var taskExecutionScope = executionScopeStore.Create(processInstance.Id, currentBpmnElement.Id, currentBpmnElement.ParentBpmnElement.Id);
 
                 var sleepTask = new SleepTask();
                 sleepTask.Execute(new ServiceTaskContext(command.Token, taskExecutionScope));
