@@ -18,7 +18,7 @@ namespace Engines
     {
         private ProcessInstance processInstance;
         private IExecutionScopeStore executionScopeStore;
-        private BlockingCollection<Command> commands = new BlockingCollection<Command>();
+        private BlockingCollection<Command> commands = new BlockingCollection<Command>(new ConcurrentQueue<Command>());
 
         public RunEngine(ProcessInstance processInstance, IExecutionScopeStore executionScopeStore)
         {
