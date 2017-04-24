@@ -9,9 +9,12 @@
     <Import_RootNamespace>DotBpm.StorageEngine</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ElementLogStore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExecutionScopeStore_InMemory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IElementLogStore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IProcessDefinitionStore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IExecutionScopeStore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessDefinitionStore_InMemory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreHelper.cs" />
   </ItemGroup>
 </Project>

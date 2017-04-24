@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.7.2">
+  <bpmn:collaboration id="Collaboration_15k3i7y">
+    <bpmn:participant id="LaneSet_Process_1" name="Lane Set Process 1" processRef="Process_1" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_1" name="Lane 1">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_19wrlje</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_2" name="Lane 2" />
+      <bpmn:lane id="Lane_3" name="Lane 3" />
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_09i89m1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_19wrlje">
+      <bpmn:incoming>SequenceFlow_09i89m1</bpmn:incoming>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="SequenceFlow_09i89m1" sourceRef="StartEvent_1" targetRef="Task_19wrlje" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_15k3i7y">
+      <bpmndi:BPMNShape id="Participant_1l2gnqo_di" bpmnElement="LaneSet_Process_1">
+        <dc:Bounds x="221" y="202" width="983" height="637" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="343" y="274" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="316" y="310" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1dyb83e_di" bpmnElement="Lane_1">
+        <dc:Bounds x="251" y="202" width="953" height="216" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1s4xzxu_di" bpmnElement="Lane_2">
+        <dc:Bounds x="251" y="418" width="953" height="194" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1cb4i53_di" bpmnElement="Lane_3">
+        <dc:Bounds x="251" y="612" width="953" height="227" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_19wrlje_di" bpmnElement="Task_19wrlje">
+        <dc:Bounds x="415" y="252" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_09i89m1_di" bpmnElement="SequenceFlow_09i89m1">
+        <di:waypoint xsi:type="dc:Point" x="379" y="292" />
+        <di:waypoint xsi:type="dc:Point" x="415" y="292" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="397" y="271" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

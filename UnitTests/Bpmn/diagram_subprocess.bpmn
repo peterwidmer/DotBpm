@@ -2,7 +2,7 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.7.2">
   <bpmn:process id="Process_0hvibim" isExecutable="false">
     <bpmn:subProcess id="sub_process_1" name="Sub Process 1">
-      <bpmn:incoming>SequenceFlow_0g76yhy</bpmn:incoming>
+      <bpmn:incoming>start_event_subprocess1</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_01tazp7</bpmn:outgoing>
       <bpmn:task id="sub_task_1" name="Sub Task 1">
         <bpmn:incoming>SequenceFlow_0kv57at</bpmn:incoming>
@@ -48,9 +48,9 @@
       <bpmn:sequenceFlow id="SequenceFlow_1nyacvn" sourceRef="sub_sub_process_1" targetRef="sub_end_event" />
     </bpmn:subProcess>
     <bpmn:startEvent id="process_start_event">
-      <bpmn:outgoing>SequenceFlow_0g76yhy</bpmn:outgoing>
+      <bpmn:outgoing>start_event_subprocess1</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0g76yhy" sourceRef="process_start_event" targetRef="sub_process_1" />
+    <bpmn:sequenceFlow id="start_event_subprocess1" sourceRef="process_start_event" targetRef="sub_process_1" />
     <bpmn:endEvent id="process_end_event">
       <bpmn:incoming>SequenceFlow_01tazp7</bpmn:incoming>
     </bpmn:endEvent>
@@ -171,7 +171,7 @@
           <dc:Bounds x="101" y="415" width="0" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0g76yhy_di" bpmnElement="SequenceFlow_0g76yhy">
+      <bpmndi:BPMNEdge id="SequenceFlow_0g76yhy_di" bpmnElement="start_event_subprocess1">
         <di:waypoint xsi:type="dc:Point" x="119" y="393" />
         <di:waypoint xsi:type="dc:Point" x="277" y="393" />
         <bpmndi:BPMNLabel>

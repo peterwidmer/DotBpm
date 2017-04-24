@@ -15,11 +15,13 @@ namespace UnitTests
     public class TestRunEngine
     {
         private static IExecutionScopeStore executionScopeStore;
+        private static IElementLogStore elementLogStore;
 
         [ClassInitialize()]
         public static void ClassInit(TestContext context)
         {
             executionScopeStore = new ExecutionScopeStore_InMemory();
+            elementLogStore = new ElementLogStore();
         }
 
         [TestMethod]
@@ -46,6 +48,14 @@ namespace UnitTests
             ExecuteProcess(processInstance, variables);
         }
 
+        [TestMethod]
+        public void TestRunEngine_SubProcessRun()
+        {
+            var processInstance = CreateProcessInstance("UnitTests.Bpmn.diagram_subprocess.bpmn", "diagram_subprocess_process");
+
+            ExecuteProcess(processInstance);
+        }
+
         private static void ExecuteProcess(ProcessInstance processInstance)
         {
             ExecuteProcess(processInstance, new Dictionary<string, object>());
@@ -53,7 +63,7 @@ namespace UnitTests
 
         private static void ExecuteProcess(ProcessInstance processInstance, Dictionary<string, object> variables)
         {
-            var runEngine = new RunEngine(processInstance, executionScopeStore);
+            var runEngine = new RunEngine(processInstance, executionScopeStore, elementLogStore);
             var task = runEngine.ExecuteProcess(variables);
             task.Wait();
         }

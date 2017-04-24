@@ -18,12 +18,15 @@ namespace Engines
     {
         private ProcessInstance processInstance;
         private IExecutionScopeStore executionScopeStore;
+        private IElementLogStore elementLogStore;
+
         private BlockingCollection<Command> commands = new BlockingCollection<Command>(new ConcurrentQueue<Command>());
 
-        public RunEngine(ProcessInstance processInstance, IExecutionScopeStore executionScopeStore)
+        public RunEngine(ProcessInstance processInstance, IExecutionScopeStore executionScopeStore, IElementLogStore elementLogStore)
         {
             this.processInstance = processInstance;
             this.executionScopeStore = executionScopeStore;
+            this.elementLogStore = elementLogStore;
         }
 
         public async Task ExecuteProcess()
@@ -40,7 +43,7 @@ namespace Engines
             {
                 foreach (var command in commands.GetConsumingEnumerable())
                 {
-                    ExecuteBackgroundWorker(command);                 
+                    ExecuteBackgroundWorker(command);
                 }
             });
         }
@@ -53,7 +56,12 @@ namespace Engines
 
         private void SetStartCommands()
         {
-            foreach (var startEvent in processInstance.BpmnProcess.Artifacts.OfType<BpmnStartEvent>())
+            StartProcess(processInstance.BpmnProcess.Artifacts.OfType<BpmnStartEvent>());
+        }
+
+        private void StartProcess(IEnumerable<BpmnStartEvent> startEvents)
+        {
+            foreach (var startEvent in startEvents)
             {
                 var token = new ProcessToken(startEvent.Id);
                 processInstance.Tokens.Add(token.Id, token);
@@ -176,6 +184,23 @@ namespace Engines
 
                 var sleepTask = new SleepTask();
                 sleepTask.Execute(new ServiceTaskContext(command.Token, taskExecutionScope));
+            }
+
+            if(currentBpmnElement is BpmnSubProcess)
+            {
+                StartProcess(((BpmnSubProcess)currentBpmnElement).Artifacts.OfType<BpmnStartEvent>());
+            }
+
+            if(currentBpmnElement is BpmnEndEvent)
+            {
+                var bpmnEndEvent = (BpmnEndEvent)currentBpmnElement;
+                if(bpmnEndEvent.ParentBpmnElement is BpmnSubProcess)
+                {
+                    var subProcess = (BpmnSubProcess)bpmnEndEvent.ParentBpmnElement;
+                    
+                    // TODO Find out if all endevents of a process have been finished
+                    // If yes, the the subprocess has ended and must move its token
+                }
             }
 
             if (currentBpmnElement is BpmnGateway)
