@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotBpm.Bpmn.BpmnModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,19 +10,19 @@ namespace DotBpm.Sdk
     public class ProcessToken
     {
         public Guid Id { get; }
-        public string CurrentElementId { get; }
+        public BpmnBaseElement CurrentElement { get; }
         public TokenStatus Status { get; set; }
 
-        public ProcessToken(string currentElementId)
+        public ProcessToken(BpmnBaseElement currentElement)
         {
             Id = Guid.NewGuid();
-            CurrentElementId = currentElementId;
+            CurrentElement = currentElement;
         }
 
-        public ProcessToken(string currentElementId, TokenStatus status)
+        public ProcessToken(BpmnBaseElement currentElement, TokenStatus status)
         {
             Id = Guid.NewGuid();
-            CurrentElementId = currentElementId;
+            CurrentElement = currentElement;
             Status = status;
         }
     }

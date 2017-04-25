@@ -11,14 +11,14 @@ namespace DotBpm.ServiceTask
     {
         public void Execute(ServiceTaskContext serviceTaskContext)
         {
-            Console.WriteLine("Start " + serviceTaskContext.Token.CurrentElementId);
+            Console.WriteLine("Start " + serviceTaskContext.Token.CurrentElement.Id);
             for(int i=0; i < 5; i++)
             {
-                Trace.WriteLine(serviceTaskContext.Token.CurrentElementId + i);
+                Trace.WriteLine(serviceTaskContext.Token.CurrentElement.Id + i);
                 Thread.Sleep(500);
 
             }
-            Trace.WriteLine("Finished " + serviceTaskContext.Token.CurrentElementId);
+            Trace.WriteLine("Finished " + serviceTaskContext.Token.CurrentElement.Id);
         }
     }
 }

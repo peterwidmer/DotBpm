@@ -67,6 +67,7 @@ namespace DotBpm.Bpmn
             {
                 var subProcess = new BpmnSubProcess();
                 subProcess.Id = subProcessElement.Attribute("id")?.Value;
+                ParseBpmnFlowNode(subProcess, subProcessElement);
                 ParseArtifacts(subProcess.Artifacts, subProcessElement, subProcess);
                 artifacts.Add(subProcess);
             }

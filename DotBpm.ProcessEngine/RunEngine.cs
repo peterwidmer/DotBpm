@@ -63,7 +63,7 @@ namespace Engines
         {
             foreach (var startEvent in startEvents)
             {
-                var token = new ProcessToken(startEvent.Id);
+                var token = new ProcessToken(startEvent);
                 processInstance.Tokens.Add(token.Id, token);
                 commands.Add(new ExecuteTokenCommand() { Token = token });
             }
@@ -109,18 +109,18 @@ namespace Engines
         {
             lock (processInstance.Tokens)
             {
-                var currentBpmnElement = processInstance.BpmnProcess.Artifacts.First(t => t.Id == command.Token.CurrentElementId);
+                var currentBpmnElement = processInstance.BpmnProcess.ArtifactIndex[command.Token.CurrentElement.Id];
                 if (currentBpmnElement is BpmnSequenceFlow)
                 {
                     // Next must be an Element
-                    Trace.WriteLine("Token on : " + command.Token.CurrentElementId);
-                    
+                    Trace.WriteLine("Token on : " + command.Token.CurrentElement.Id);
+
                     var sequenceFlow = (BpmnSequenceFlow)currentBpmnElement;
                     HandleSequenceConditionExpression(command, sequenceFlow.ConditionExpression);
 
                     // The new token must take the status of the previous token over, so that inactive token proceed
                     // further as inactive tokens
-                    var token = new ProcessToken(sequenceFlow.TargetRef, command.Token.Status);
+                    var token = new ProcessToken(processInstance.BpmnProcess.ArtifactIndex[sequenceFlow.TargetRef], command.Token.Status);
                     processInstance.Tokens.Add(token.Id, token);
                     commands.Add(new ExecuteTokenCommand() { Token = token });
                 }
@@ -133,7 +133,7 @@ namespace Engines
                     {
                         // The new token must take the status of the previous token over, so that inactive token proceed
                         // further as inactive tokens
-                        var token = new ProcessToken(outgoing, command.Token.Status);
+                        var token = new ProcessToken(processInstance.BpmnProcess.ArtifactIndex[outgoing], command.Token.Status);
                         processInstance.Tokens.Add(token.Id, token);
                         commands.Add(new ProceedTokenCommand() { Token = token });
                     }
@@ -173,9 +173,9 @@ namespace Engines
 
         private void HandleExecuteTokenCommand(ExecuteTokenCommand command)
         {
-            Trace.WriteLine("Token on : " + command.Token.CurrentElementId + " with status " + command.Token.Status);
+            Trace.WriteLine("Token on : " + command.Token.CurrentElement.Id + " with status " + command.Token.Status);
             
-            var currentBpmnElement = processInstance.BpmnProcess.ArtifactIndex[command.Token.CurrentElementId];
+            var currentBpmnElement = processInstance.BpmnProcess.ArtifactIndex[command.Token.CurrentElement.Id];
             if(currentBpmnElement is BpmnServiceTask && command.Token.Status == TokenStatus.Active)
             {
                 processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;
@@ -189,25 +189,39 @@ namespace Engines
             if(currentBpmnElement is BpmnSubProcess)
             {
                 StartProcess(((BpmnSubProcess)currentBpmnElement).Artifacts.OfType<BpmnStartEvent>());
+                return;
             }
 
             if(currentBpmnElement is BpmnEndEvent)
             {
+                processInstance.Tokens[command.Token.Id].Status = TokenStatus.Inactive;
                 var bpmnEndEvent = (BpmnEndEvent)currentBpmnElement;
                 if(bpmnEndEvent.ParentBpmnElement is BpmnSubProcess)
                 {
                     var subProcess = (BpmnSubProcess)bpmnEndEvent.ParentBpmnElement;
-                    
-                    // TODO Find out if all endevents of a process have been finished
-                    // If yes, the the subprocess has ended and must move its token
+
+                    lock (processInstance.Tokens)
+                    {
+                        if(bpmnEndEvent.Id == "sub_end_event")
+                        {
+                            var subsubProcessToken = processInstance.Tokens.FirstOrDefault(t => t.Value.CurrentElement.Id == "sub_sub_process_1");
+                        }
+
+                        var activeTokensCount = processInstance.Tokens.Count(t => t.Value.CurrentElement.ParentBpmnElement.Id == subProcess.Id && t.Value.Status != TokenStatus.Inactive);
+                        if (activeTokensCount == 0)
+                        {
+                            var subProcessToken = processInstance.Tokens.First(t => t.Value.CurrentElement.Id == subProcess.Id);
+                            commands.Add(new ProceedTokenCommand() { Token = subProcessToken.Value });
+                        }
+                    }
                 }
             }
 
             if (currentBpmnElement is BpmnGateway)
             {
                 var gateway = (BpmnGateway)currentBpmnElement;
-                int numberOfTokensReceivedOnGateway = processInstance.Tokens.Count(t => t.Value.CurrentElementId == command.Token.CurrentElementId);
-                if(gateway.Incoming.Count == numberOfTokensReceivedOnGateway)
+                int numberOfTokensReceivedOnGateway = processInstance.Tokens.Count(t => t.Value.CurrentElement.Id == command.Token.CurrentElement.Id);
+                if (gateway.Incoming.Count == numberOfTokensReceivedOnGateway)
                 {
                     commands.Add(new ProceedTokenCommand() { Token = command.Token });
                 }
