@@ -20,6 +20,15 @@ namespace DotBpm.Sdk
             return (T)FindVariableInScopeHierarchy(ExecutionScope, variable);
         }
 
+        public void SetVariable(string variableName, object variableValue)
+        {
+            bool variableHasBeenSet = SetVariableInScopeHierarchy(ExecutionScope, variableName, variableValue);
+            if(!variableHasBeenSet)
+            {
+                ExecutionScope.Variables.Add(variableName, variableValue);
+            }
+        }
+
         private object FindVariableInScopeHierarchy(ExecutionScope currentScope, string variable)
         {
             if(currentScope.Variables.ContainsKey(variable))
@@ -35,6 +44,23 @@ namespace DotBpm.Sdk
                 throw new ArgumentOutOfRangeException("A variable with the name " + variable + " does not exist");
             }
         }
-        
+
+        private bool SetVariableInScopeHierarchy(ExecutionScope currentScope, string variableName, object variableValue)
+        {
+            if (currentScope.Variables.ContainsKey(variableName))
+            {
+                currentScope.Variables[variableName] = variableValue;
+                return true;
+            }
+            else if (currentScope.ParentScope != null)
+            {
+                return SetVariableInScopeHierarchy(currentScope.ParentScope, variableName, variableValue);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

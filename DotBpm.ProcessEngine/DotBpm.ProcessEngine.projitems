@@ -11,5 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ProcessEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RunEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServiceTaskEngine.cs" />
   </ItemGroup>
 </Project>
