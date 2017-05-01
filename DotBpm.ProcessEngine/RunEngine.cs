@@ -11,22 +11,23 @@ using System.Diagnostics;
 using DotBpm.ServiceTask;
 using System.ComponentModel;
 using DotBpm.StorageEngine;
+using DotBpm.Engines;
 
-namespace Engines
+namespace DotBom.Engines
 {
     public class RunEngine
     {
         private ProcessInstance processInstance;
         private IExecutionScopeStore executionScopeStore;
-        private IElementLogStore elementLogStore;
+        private IServiceTaskEngine serviceTaskEngine;
 
         private BlockingCollection<Command> commands = new BlockingCollection<Command>(new ConcurrentQueue<Command>());
 
-        public RunEngine(ProcessInstance processInstance, IExecutionScopeStore executionScopeStore, IElementLogStore elementLogStore)
+        public RunEngine(ProcessInstance processInstance, IExecutionScopeStore executionScopeStore, IServiceTaskEngine serviceTaskEngine)
         {
             this.processInstance = processInstance;
             this.executionScopeStore = executionScopeStore;
-            this.elementLogStore = elementLogStore;
+            this.serviceTaskEngine = serviceTaskEngine;
         }
 
         public async Task ExecuteProcess()
@@ -178,12 +179,14 @@ namespace Engines
             var currentBpmnElement = processInstance.BpmnProcess.ArtifactIndex[command.Token.CurrentElement.Id];
             if(currentBpmnElement is BpmnServiceTask && command.Token.Status == TokenStatus.Active)
             {
+                var serviceTaskBpmnElement = (BpmnServiceTask)currentBpmnElement;
+
                 processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;
 
-                var taskExecutionScope = executionScopeStore.Create(processInstance.Id, currentBpmnElement.Id, currentBpmnElement.ParentBpmnElement.Id);
+                var serviceTaskExecutionScope = executionScopeStore.Create(processInstance.Id, currentBpmnElement.Id, currentBpmnElement.ParentBpmnElement.Id);
 
-                var sleepTask = new SleepTask();
-                sleepTask.Execute(new ServiceTaskContext(command.Token, taskExecutionScope));
+                var serviceTask = serviceTaskEngine.GetInstance(serviceTaskBpmnElement.Class);
+                serviceTask.Execute(new ServiceTaskContext(command.Token, serviceTaskExecutionScope));
             }
 
             if(currentBpmnElement is BpmnSubProcess)

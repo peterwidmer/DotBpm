@@ -9,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Engines
+namespace DotBom.Engines
 {
-    public class ProcessEngine
+    public class ProcessEngine : IProcessEngine
     {
         private IProcessDefinitionStore processDefinitionStore;
 

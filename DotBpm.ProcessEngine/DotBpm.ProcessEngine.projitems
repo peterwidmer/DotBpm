@@ -6,9 +6,12 @@
     <SharedGUID>8d986cac-2fb1-4210-bfd4-cd4ea1523eaf</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>DotBpm.ProcessEngine</Import_RootNamespace>
+    <Import_RootNamespace>DotBpm.Engines</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DotBpmEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IProcessEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IServiceTaskEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RunEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServiceTaskEngine.cs" />

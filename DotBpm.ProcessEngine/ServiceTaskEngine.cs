@@ -4,10 +4,11 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using DotBpm.Sdk;
+using DotBpm.Engines;
 
-namespace DotBpm.ProcessEngine
+namespace DotBom.Engines
 {
-    public class ServiceTaskEngine
+    public class ServiceTaskEngine : IServiceTaskEngine
     {
         private List<Type> AvailablServiceTasks = new List<Type>();
 
@@ -25,12 +26,12 @@ namespace DotBpm.ProcessEngine
             }
         }
 
-        public object GetInstance(string className)
+        public IServiceTask GetInstance(string className)
         {
-            Type serviceTaskType = AvailablServiceTasks.FirstOrDefault(t => t.Name == className);
+            Type serviceTaskType = AvailablServiceTasks.FirstOrDefault(t => t.Name == className || t.FullName == className);
             if (serviceTaskType != null)
             {
-                return Activator.CreateInstance(serviceTaskType);
+                return (IServiceTask)Activator.CreateInstance(serviceTaskType);
             }
             else
             {
