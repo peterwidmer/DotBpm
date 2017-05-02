@@ -1,15 +1,13 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DotBpm.Sdk;
-using DotBom;
 using StorageEngine;
-using DotBpm.Bpmn;
 using System.Xml;
 using DotBpm.StorageEngine;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using DotBom.Engines;
 using DotBpm.Engines;
+using UnitTests.RunEngine;
 
 namespace UnitTests
 {
@@ -37,7 +35,7 @@ namespace UnitTests
         [TestMethod]
         public void TestRunEngine_SimpleRun()
         {
-            var processInstance = CreateProcessInstance("UnitTests.Bpmn.diagram.bpmn", "diagram_process");
+            var processInstance = RunEngine_TestHelper.CreateProcessInstance(processEngine, processDefinitionStore, "UnitTests.Bpmn.diagram.bpmn", "diagram_process");
 
             dotBpmEngine.ExecuteProcess(processInstance);
         }
@@ -45,7 +43,7 @@ namespace UnitTests
         [TestMethod]
         public void TestRunEngine_ParallelGatewayRun()
         {
-            var processInstance = CreateProcessInstance("UnitTests.Bpmn.diagram_parallelgateway.bpmn", "diagram_parallelgateway_process");
+            var processInstance = RunEngine_TestHelper.CreateProcessInstance(processEngine, processDefinitionStore, "UnitTests.Bpmn.diagram_parallelgateway.bpmn", "diagram_parallelgateway_process");
 
             dotBpmEngine.ExecuteProcess(processInstance);
         }
@@ -53,7 +51,7 @@ namespace UnitTests
         [TestMethod]
         public void TestRunEngine_ExclusiveGatewayRun()
         {
-            var processInstance = CreateProcessInstance("UnitTests.Bpmn.diagram_exclusivegateway.bpmn", "diagram_exclusivegateway");
+            var processInstance = RunEngine_TestHelper.CreateProcessInstance(processEngine, processDefinitionStore, "UnitTests.Bpmn.diagram_exclusivegateway.bpmn", "diagram_exclusivegateway");
             var variables = new Dictionary<string, object>() { { "decision", "test_task_2" } };
             dotBpmEngine.ExecuteProcess(processInstance, variables);
         }
@@ -61,17 +59,9 @@ namespace UnitTests
         [TestMethod]
         public void TestRunEngine_SubProcessRun()
         {
-            var processInstance = CreateProcessInstance("UnitTests.Bpmn.diagram_subprocess.bpmn", "diagram_subprocess_process");
+            var processInstance = RunEngine_TestHelper.CreateProcessInstance(processEngine, processDefinitionStore, "UnitTests.Bpmn.diagram_subprocess.bpmn", "diagram_subprocess_process");
 
             dotBpmEngine.ExecuteProcess(processInstance);
-        }
-
-        public ProcessInstance CreateProcessInstance(string diagramFile, string processName)
-        {
-            string bpmnProcessContent = TestHelper.GetEmbeddedResourceAsString(diagramFile);
-            processDefinitionStore.Save(processName, bpmnProcessContent);
-
-            return processEngine.GetProcessInstance(processName);
         }
     }
 }

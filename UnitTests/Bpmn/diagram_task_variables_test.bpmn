@@ -10,6 +10,13 @@
     <bpmn:sequenceFlow id="seq_start_event_addition" sourceRef="start_event" targetRef="math_task_addition" />
     <bpmn:sequenceFlow id="SequenceFlow_077i78i" sourceRef="math_task_addition" targetRef="end_event" />
     <bpmn:serviceTask id="math_task_addition" name="Calculate 1 + 2" camunda:class="MathTask">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="operation">add</camunda:inputParameter>
+          <camunda:inputParameter name="parameter1">${value1}</camunda:inputParameter>
+          <camunda:inputParameter name="parameter2">${value2}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>seq_start_event_addition</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_077i78i</bpmn:outgoing>
     </bpmn:serviceTask>

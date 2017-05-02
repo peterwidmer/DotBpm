@@ -59,7 +59,9 @@
     <Compile Include="Bpmn\LoadDiagram_SubProcess_Tests.cs" />
     <Compile Include="Bpmn\LoadDiagram_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunEngine\RunEngine_TestHelper.cs" />
     <Compile Include="RunEngine\TestRunEngine.cs" />
+    <Compile Include="RunEngine\TestRunEngine_TaskVariables_Test.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="StorageEngine\TestProcessDefinitionStore_InMemory.cs" />
   </ItemGroup>
@@ -80,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Bpmn\diagram_subprocess.bpmn" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Bpmn\diagram_task_variables_test.bpmn" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

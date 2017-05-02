@@ -125,13 +125,19 @@ namespace DotBpm.Bpmn
 
         private void ParseServiceTasks(List<BpmnBaseElement> artifacts, XElement processElement)
         {
-            foreach (var taskElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "serviceTask"))
+            foreach (var serviceTaskElement in processElement.Elements("{" + NS_BPMNMODEL + "}" + "serviceTask"))
             {
                 var serviceTask = new BpmnServiceTask();
-                serviceTask.Class = taskElement.Attribute("{" + NS_CAMUNDA + "}" + "class")?.Value;
-                ParseTask(taskElement, serviceTask);
+                serviceTask.Class = serviceTaskElement.Attribute("{" + NS_CAMUNDA + "}" + "class")?.Value;
+                ParseTask(serviceTaskElement, serviceTask);
+                ParseElementParameters(serviceTask, serviceTaskElement);
                 artifacts.Add(serviceTask);
             }
+        }
+
+        private void ParseElementParameters(BpmnServiceTask bpmnServiceTask, XElement serviceTaskElement)
+        {
+            // TODO Parse input/output
         }
 
         private void ParseTask(XElement taskElement, BpmnTask task)

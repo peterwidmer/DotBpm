@@ -6,7 +6,7 @@ using System.Linq;
 using DotBpm.Sdk;
 using DotBpm.Engines;
 
-namespace DotBom.Engines
+namespace DotBpm.Engines
 {
     public class ServiceTaskEngine : IServiceTaskEngine
     {

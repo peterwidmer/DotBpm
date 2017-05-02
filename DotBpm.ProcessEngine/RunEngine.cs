@@ -13,7 +13,7 @@ using System.ComponentModel;
 using DotBpm.StorageEngine;
 using DotBpm.Engines;
 
-namespace DotBom.Engines
+namespace DotBpm.Engines
 {
     public class RunEngine
     {

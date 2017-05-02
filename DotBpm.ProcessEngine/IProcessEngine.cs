@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DotBom.Engines
+namespace DotBpm.Engines
 {
     public interface IProcessEngine
     {
