@@ -12,6 +12,7 @@ using DotBpm.ServiceTask;
 using System.ComponentModel;
 using DotBpm.StorageEngine;
 using DotBpm.Engines;
+using System.Text.RegularExpressions;
 
 namespace DotBpm.Engines
 {
@@ -184,9 +185,22 @@ namespace DotBpm.Engines
                 processInstance.Tokens[command.Token.Id].Status = TokenStatus.InExecution;
 
                 var serviceTaskExecutionScope = executionScopeStore.Create(processInstance.Id, currentBpmnElement.Id, currentBpmnElement.ParentBpmnElement.Id);
-
+                
                 var serviceTask = serviceTaskEngine.GetInstance(serviceTaskBpmnElement.Class);
-                serviceTask.Execute(new ServiceTaskContext(command.Token, serviceTaskExecutionScope));
+                var serviceTaskContext = new ServiceTaskContext(command.Token, serviceTaskExecutionScope);
+
+                foreach (var inputParameter in serviceTaskBpmnElement.InputParameters)
+                {
+                    foreach (Match match in Regex.Matches(inputParameter.Value, @"\${(.*)}"))
+                    {
+                        string variableName = match.Groups[1].Value;
+                        inputParameter.Value = inputParameter.Value.Replace(match.Value, serviceTaskContext.GetVariable<string>(variableName));
+                    }
+
+                    serviceTaskContext.SetVariable(inputParameter.Name, inputParameter.Value);
+                }
+
+                serviceTask.Execute(serviceTaskContext);
             }
 
             if(currentBpmnElement is BpmnSubProcess)

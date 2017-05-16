@@ -84,7 +84,7 @@
     <EmbeddedResource Include="Bpmn\diagram_subprocess.bpmn" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bpmn\diagram_task_variables_test.bpmn" />
+    <EmbeddedResource Include="Bpmn\diagram_task_variables_test.bpmn" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -1,4 +1,5 @@
 ﻿using DotBpm.Bpmn.BpmnModel;
+using DotBpm.Bpmn.CamundaExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,14 +131,8 @@ namespace DotBpm.Bpmn
                 var serviceTask = new BpmnServiceTask();
                 serviceTask.Class = serviceTaskElement.Attribute("{" + NS_CAMUNDA + "}" + "class")?.Value;
                 ParseTask(serviceTaskElement, serviceTask);
-                ParseElementParameters(serviceTask, serviceTaskElement);
                 artifacts.Add(serviceTask);
             }
-        }
-
-        private void ParseElementParameters(BpmnServiceTask bpmnServiceTask, XElement serviceTaskElement)
-        {
-            // TODO Parse input/output
         }
 
         private void ParseTask(XElement taskElement, BpmnTask task)
@@ -182,7 +177,7 @@ namespace DotBpm.Bpmn
 
         private void ParseBpmnFlowNode(BpmnFlowNode bpmnFlowNode, XElement bpmnElement)
         {
-            foreach(var incoming in bpmnElement.Elements("{" + NS_BPMNMODEL + "}" + "incoming"))
+            foreach (var incoming in bpmnElement.Elements("{" + NS_BPMNMODEL + "}" + "incoming"))
             {
                 bpmnFlowNode.Incoming.Add(incoming.Value);
             }
@@ -192,7 +187,28 @@ namespace DotBpm.Bpmn
                 bpmnFlowNode.Outgoing.Add(outgoing.Value);
             }
 
+            ParseCamundaFlowNodeExtensionElements(bpmnFlowNode, bpmnElement);
             ParseBpmnFlowElement(bpmnFlowNode, bpmnElement);
+        }
+
+        private static void ParseCamundaFlowNodeExtensionElements(BpmnFlowNode bpmnFlowNode, XElement bpmnElement)
+        {
+            foreach (var extensionElements in bpmnElement.Elements("{" + NS_BPMNMODEL + "}" + "extensionElements"))
+            {
+                var inputOutputElement = extensionElements.Element("{" + NS_CAMUNDA + "}" + "inputOutput");
+                if (inputOutputElement != null)
+                {
+                    foreach (var inputParameterElement in inputOutputElement.Elements("{" + NS_CAMUNDA + "}" + "inputParameter"))
+                    {
+                        bpmnFlowNode.InputParameters.Add(new ElementParameter(inputParameterElement.Attribute("name").Value, inputParameterElement.Value));
+                    }
+
+                    foreach (var outputParameterElement in inputOutputElement.Elements("{" + NS_CAMUNDA + "}" + "outputParameter"))
+                    {
+                        bpmnFlowNode.OutputParameters.Add(new ElementParameter(outputParameterElement.Attribute("name").Value, outputParameterElement.Value));
+                    }
+                }
+            }
         }
     }
 }

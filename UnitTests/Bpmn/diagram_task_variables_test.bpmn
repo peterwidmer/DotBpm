@@ -5,10 +5,10 @@
       <bpmn:outgoing>seq_start_event_addition</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:endEvent id="end_event">
-      <bpmn:incoming>SequenceFlow_077i78i</bpmn:incoming>
+      <bpmn:incoming>seq_addition_end_event</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="seq_start_event_addition" sourceRef="start_event" targetRef="math_task_addition" />
-    <bpmn:sequenceFlow id="SequenceFlow_077i78i" sourceRef="math_task_addition" targetRef="end_event" />
+    <bpmn:sequenceFlow id="seq_addition_end_event" sourceRef="math_task_addition" targetRef="end_event" />
     <bpmn:serviceTask id="math_task_addition" name="Calculate 1 + 2" camunda:class="MathTask">
       <bpmn:extensionElements>
         <camunda:inputOutput>
@@ -18,7 +18,7 @@
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>seq_start_event_addition</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_077i78i</bpmn:outgoing>
+      <bpmn:outgoing>seq_addition_end_event</bpmn:outgoing>
     </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -39,7 +39,7 @@
           <dc:Bounds x="274" y="99" width="0" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_077i78i_di" bpmnElement="SequenceFlow_077i78i">
+      <bpmndi:BPMNEdge id="SequenceFlow_077i78i_di" bpmnElement="seq_addition_end_event">
         <di:waypoint xsi:type="dc:Point" x="439" y="120" />
         <di:waypoint xsi:type="dc:Point" x="623" y="120" />
         <bpmndi:BPMNLabel>

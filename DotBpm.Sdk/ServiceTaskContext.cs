@@ -17,7 +17,17 @@ namespace DotBpm.Sdk
 
         public T GetVariable<T>(string variable)
         {
-            return (T)FindVariableInScopeHierarchy(ExecutionScope, variable);
+            object result = FindVariableInScopeHierarchy(ExecutionScope, variable);
+            if (typeof(T) == typeof(string))
+            {
+                result = result.ToString();
+            }
+            else if(typeof(T) == typeof(int))
+            {
+                result = Convert.ToInt32(result);
+            }
+
+            return (T)result;
         }
 
         public void SetVariable(string variableName, object variableValue)
