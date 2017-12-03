@@ -9,6 +9,7 @@
     <Import_RootNamespace>DotBpm.Bpmn</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BpmnGeneratedFromXsd\BPMN20_BPMNDI_DI_DC.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnActivity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnBaseElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BpmnModel\BpmnEndEvent.cs" />
