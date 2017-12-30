@@ -201,6 +201,14 @@ namespace DotBpm.Engines
                 }
 
                 serviceTask.Execute(serviceTaskContext);
+
+                foreach(var outputParameter in serviceTaskBpmnElement.OutputParameters)
+                {
+                    var outputValue = serviceTaskContext.GetVariable<string>(outputParameter.Name);
+                    var outputVariableName = Regex.Match(outputParameter.Value, @"\${(.*)}").Groups[1].Value;
+
+                    serviceTaskContext.ExecutionScope.ParentScope.SetVariable(outputVariableName, outputValue);
+                }
             }
 
             if(currentBpmnElement is BpmnSubProcess)
